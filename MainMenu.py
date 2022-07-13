@@ -1,4 +1,3 @@
-from turtle import left
 import pygame
 import time
 import math
@@ -54,7 +53,7 @@ class Robot:  # Abstract class for player and ai robots
 
     # reduces the speed only active if w is not pressed
     def slowDown(self):
-        self.speed = max(self.speed - self. acceleration / 2, 0)
+        self.speed = max(self.speed - self.acceleration, 0)
         self.move()
 
 
@@ -75,7 +74,7 @@ clock = pygame.time.Clock()
 images = [(MAP, (0, 0)), (BORDER, (0, 0))]
 player_robo = PlayerRobo(4, 4)
 
-    # main loop
+# main loop
 while run:
     clock.tick(FPS)
 
