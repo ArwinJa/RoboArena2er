@@ -2,7 +2,7 @@ import pygame
 import sys
 
 pygame.init()
-screen = pygame.display.set_mode([600,600])
+screen = pygame.display.set_mode([600, 600])
 clock = pygame.time.Clock()
 
 x = 300
@@ -14,8 +14,8 @@ height = 80
 go = True
 while go:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
-
+        if event.type == pygame.QUIT:
+            sys.exit()
     pressed = pygame.key.get_pressed()
     if pressed[pygame.K_UP]:
         y -= speed
@@ -26,7 +26,7 @@ while go:
     if pressed[pygame.K_LEFT]:
         x -= speed
 
-    screen.fill((0,0,0))
-    pygame.draw.rect(screen, (0,255,0), (x,y,width,height))
+    screen.fill((0, 0, 0))
+    pygame.draw.rect(screen, (0, 255, 0), (x, y, width, height))
     pygame.display.update()
     clock.tick(60)
