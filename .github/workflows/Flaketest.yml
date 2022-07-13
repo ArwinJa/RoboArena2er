@@ -12,9 +12,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-        test
           python-version: 3.9.13
-        main
           architecture: x64
       - name: Checkout PyTorch
         uses: actions/checkout@master
