@@ -14,19 +14,15 @@ height = 80
 go = True
 while go:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
-
+        if event.type == pygame.QUIT:
+             sys.exit()
     pressed = pygame.key.get_pressed()
-
     if pressed[pygame.K_UP]:
         y -= speed
-
     if pressed[pygame.K_RIGHT]:
         x += speed
-
     if pressed[pygame.K_DOWN]:
         y += speed
-        
     if pressed[pygame.K_LEFT]:
         x -= speed
 
