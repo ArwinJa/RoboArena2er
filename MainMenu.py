@@ -1,4 +1,3 @@
-from tkinter import HORIZONTAL
 from turtle import left
 import pygame
 import time
@@ -16,6 +15,7 @@ pygame.display.set_caption("RoboArena")
 FPS = 60
 
 class Robot:
+
 
     def __init__(self, maxSpeed, rotSpeed):
         self.img = self.IMG
@@ -53,6 +53,8 @@ class Robot:
 
 
 class PlayerRobo(Robot):
+
+
     IMG = ROBO
     STARTPOS = (500, 500)
 
@@ -73,7 +75,6 @@ while run:
 
     draw(Window, images)
 
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -89,14 +90,8 @@ while run:
     if keys[pygame.K_w]:
         moved = True
         player_robo.moveForward()
-
-    
     if not moved:
         player_robo.slowDown()
-
-    
-    
-
 
 pygame.quit()
     
