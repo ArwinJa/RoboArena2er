@@ -15,7 +15,7 @@ go = True
 while go:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-             sys.exit()
+            sys.exit()
     pressed = pygame.key.get_pressed()
     if pressed[pygame.K_UP]:
         y -= speed
