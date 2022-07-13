@@ -68,6 +68,7 @@ def draw(win, images):
         player_robo.draw(win)
         pygame.display.update()
 
+
 run = True
 clock = pygame.time.Clock()
 images = [(MAP, (0, 0)), (BORDER, (0, 0))]
