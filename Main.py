@@ -41,6 +41,11 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = min(self.speed + self.acceleration, self.maxSpeed)
         self.move()
 
+    # robot takes the smaller or speed and maxSpeed and will move backward
+    def moveBackward(self):
+        self.speed = max(self.speed - self.acceleration, -self.maxSpeed/2)
+        self.move()
+
     # movement vector
     def move(self):
         radians = math.radians(self.angle)
@@ -68,6 +73,25 @@ def draw(win, images):
         player_robo.draw(win)
         pygame.display.update()
 
+def movePlayer(player_robo):
+
+    keys = pygame.key.get_pressed()
+    moved = False
+
+    # key events
+    if keys[pygame.K_a]:
+        player_robo.rotate(left=True)
+    if keys[pygame.K_d]:
+        player_robo.rotate(right=True)
+    if keys[pygame.K_w]:
+        moved = True
+        player_robo.moveForward()
+    if keys[pygame.K_s]:
+        moved = True
+        player_robo.moveBackward()
+    if not moved:
+        player_robo.slowDown()
+
 
 run = True
 clock = pygame.time.Clock()
@@ -85,18 +109,6 @@ while run:
             run = False
             break
 
-    keys = pygame.key.get_pressed()
-    moved = False
-
-    # key events
-    if keys[pygame.K_a]:
-        player_robo.rotate(left=True)
-    if keys[pygame.K_d]:
-        player_robo.rotate(right=True)
-    if keys[pygame.K_w]:
-        moved = True
-        player_robo.moveForward()
-    if not moved:
-        player_robo.slowDown()
+    movePlayer(player_robo)
 
 pygame.quit()
