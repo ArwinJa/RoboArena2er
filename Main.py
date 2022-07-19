@@ -3,8 +3,6 @@ import math
 import csv
 from tools import blitRotate
 
-
-
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
 ROBO = pygame.image.load("img/Robot.png")
@@ -82,7 +80,7 @@ class Tile(pygame.sprite.Sprite):
 
     def draw(self, win):
         pygame.blit(self.image, (self.rect.x, self.rect.y))
-        
+
 
 class TileMap():
     def __init__(self):
@@ -171,4 +169,3 @@ while run:
     movePlayer(player_robo)
 
 pygame.quit()
-
