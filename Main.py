@@ -1,16 +1,26 @@
 import pygame
 import math
+import csv
 from tools import blitRotate
 
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
 ROBO = pygame.image.load("img/Robot.png")
 
+GRASS = pygame.image.load("img/Grass-Tiles.png")
+ELECTRIC = pygame.image.load("img/Electric-Tiles.png")
+SAND = pygame.image.load("img/Sand-Tiles.png")
+WALL = pygame.image.load("img/Wall-Tiles.png")
+WATER = pygame.image.load("img/Water-Tiles.png")
+
 WIDTH, HEIGHT = MAP.get_width(), MAP.get_height()
+canvas = pygame.Surface((WIDTH, HEIGHT))
 Window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("RoboArena")
 
 FPS = 60
+TILECOUNT = 40
+TILEPIX = 25
 
 
 class Robot:  # Abstract class for player and ai robots
@@ -61,17 +71,62 @@ class Robot:  # Abstract class for player and ai robots
         self.move()
 
 
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(image)
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = x, y
+
+    def draw(self, win):
+        pygame.blit(self.image, (self.rect.x, self.rect.y))
+
+
+class TileMap():
+    def __init__(self):
+        self.background = []
+        self.loadbackground()
+
+    def drawtiles(self, win):
+        for i in range(TILECOUNT):
+            for j in range(TILECOUNT):
+                if self.background[i][j] == 1:
+                    win.blit(WALL, (j * TILEPIX, i * TILEPIX))
+                elif self.background[i][j] == 2:
+                    win.blit(GRASS, (j * TILEPIX, i * TILEPIX))
+                elif self.background[i][j] == 3:
+                    win.blit(WATER, (j * TILEPIX, i * TILEPIX))
+                elif self.background[i][j] == 4:
+                    win.blit(ELECTRIC, (j * TILEPIX, i * TILEPIX))
+                elif self.background[i][j] == 5:
+                    win.blit(SAND, (j * TILEPIX, i * TILEPIX))
+
+    def loadbackground(self):
+        file = open('csvmap.csv')
+        csvreader = csv.reader(file)
+        rows = []
+        test = list()
+        for row in csvreader:
+            rows.append(row)
+
+        for i in range(len(rows)):
+            for j in range(len(rows[i])):
+                test.append(int(rows[i][j]))
+            self.background.append(test.copy())
+            test.clear()
+        file.close()
+
+
 class PlayerRobo(Robot):
 
     IMG = ROBO
     STARTPOS = (500, 500)
 
 
-def draw(win, images):
-    for img, pos in images:
-        Window.blit(img, pos)
-        player_robo.draw(win)
-        pygame.display.update()
+def draw(win):
+    map.drawtiles(win)
+    player_robo.draw(win)
+    pygame.display.update()
 
 
 def movePlayer(player_robo):
@@ -95,15 +150,16 @@ def movePlayer(player_robo):
 
 
 run = True
-clock = pygame.time.Clock()
+map = TileMap()
 images = [(MAP, (0, 0)), (BORDER, (0, 0))]
+clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 4)
 
 # main loop
 while run:
     clock.tick(FPS)
 
-    draw(Window, images)
+    draw(Window)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
