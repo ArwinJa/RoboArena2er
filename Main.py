@@ -67,8 +67,7 @@ class Robot:  # Abstract class for player and ai robots
         self.y -= vertical
         self.x -= horizontal
 
-    
-    def collide(self, mask, x = 0, y=0):
+    def collide(self, mask, x=0, y=0):
         robo_mask = pygame.mask.from_surface(self.img)
         offset = (int(self.x - x), int(self.y - y))
         poi = mask.overlap(robo_mask, offset)
@@ -176,7 +175,7 @@ while run:
 
     movePlayer(player_robo)
 
-    if player_robo.collide(WALLMASK) != None:
+    if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
 
 pygame.quit()
