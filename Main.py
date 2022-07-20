@@ -1,4 +1,3 @@
-from lib2to3.pgen2.token import TILDE
 import pygame
 import math
 import csv
@@ -18,7 +17,7 @@ WIDTH, HEIGHT = MAP.get_width(), MAP.get_height()
 Window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("RoboArena")
 
-#Surfaces for masks
+# Surfaces for masks
 Wall = pygame.Surface((WIDTH, HEIGHT))
 Wall.set_colorkey((0, 0, 0))
 Sand = pygame.Surface((WIDTH, HEIGHT))
@@ -75,19 +74,19 @@ class Robot:  # Abstract class for player and ai robots
 
     # movement vector
     def move(self):
-            radians = math.radians(self.angle)
-            vertical = math.cos(radians) * self.speed
-            horizontal = math.sin(radians) * self.speed
+        radians = math.radians(self.angle)
+        vertical = math.cos(radians) * self.speed
+        horizontal = math.sin(radians) * self.speed
 
-            self.y -= vertical
-            self.x -= horizontal
+        self.y -= vertical
+        self.x -= horizontal
 
     def collide(self, mask, x=0, y=0):
         robo_mask = pygame.mask.from_surface(self.img)
         offset = (int(self.x - x), int(self.y - y))
         poi = mask.overlap(robo_mask, offset)
         return poi
-    
+
     def inTile(self, mask, x=0, y=0):
         robo_mask = pygame.mask.from_surface(self.img)
         bits_robo_mask = robo_mask.count()
@@ -115,8 +114,6 @@ class Robot:  # Abstract class for player and ai robots
             self.move()
 
 
-
-
 class TileMap():
     def __init__(self):
         self.background = []
@@ -136,7 +133,7 @@ class TileMap():
                 elif self.background[i][j] == 5:
                     win.blit(SAND, (j * TILEPIX, i * TILEPIX))
 
-    #save csv map in a list of lists
+    # save csv map in a list of lists
     def loadbackground(self):
         file = open('csvmap.csv')
         csvreader = csv.reader(file)
@@ -152,7 +149,7 @@ class TileMap():
             test.clear()
         file.close()
 
-    #uses list of list background to create a mask of walls
+    # uses list of list background to create a mask of walls
     def create_Wall_Mask(self, win):
         for i in range(TILECOUNT):
             for j in range(TILECOUNT):
@@ -160,7 +157,7 @@ class TileMap():
                     win.blit(WALL, (j * TILEPIX, i * TILEPIX))
         return pygame.mask.from_surface(win)
 
-    #uses list of list background to create a mask of walls
+    # uses list of list background to create a mask of walls
     def create_Mask(self, win, tile):
         if tile == 1:
             for i in range(TILECOUNT):
@@ -168,10 +165,10 @@ class TileMap():
                     if self.background[i][j] == 1:
                         win.blit(WALL, (j * TILEPIX, i * TILEPIX))
         elif tile == 2:
-                for i in range(TILECOUNT):
-                    for j in range(TILECOUNT):
-                        if self.background[i][j] == 2:
-                            win.blit(GRASS, (j * TILEPIX, i * TILEPIX))
+            for i in range(TILECOUNT):
+                for j in range(TILECOUNT):
+                    if self.background[i][j] == 2:
+                        win.blit(GRASS, (j * TILEPIX, i * TILEPIX))
         elif tile == 3:
             for i in range(TILECOUNT):
                 for j in range(TILECOUNT):
@@ -194,10 +191,6 @@ class PlayerRobo(Robot):
 
     IMG = ROBO
     STARTPOS = (500, 500)
-
-    # reduces the speed only active if w is not pressed
-    
-
 
 
 def draw(win):
