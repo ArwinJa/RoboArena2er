@@ -161,7 +161,7 @@ class TileMap():
     def create_Mask(self, win, tile):
         if tile == 1:
             for i in range(TILECOUNT):
-                for j in range(TILECOUNT):    
+                for j in range(TILECOUNT):
                     if self.background[i][j] == 1:
                         win.blit(WALL, (j * TILEPIX, i * TILEPIX))
         elif tile == 2:
