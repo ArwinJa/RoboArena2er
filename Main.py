@@ -15,12 +15,14 @@ WATER = pygame.image.load("img/Water-Tiles.png")
 
 WIDTH, HEIGHT = MAP.get_width(), MAP.get_height()
 canvas = pygame.Surface((WIDTH, HEIGHT))
+canvas.set_colorkey((0, 0, 0))
 Window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("RoboArena")
 
 FPS = 60
 TILECOUNT = 40
 TILEPIX = 25
+run = True
 
 
 class Robot:  # Abstract class for player and ai robots
@@ -65,21 +67,12 @@ class Robot:  # Abstract class for player and ai robots
         self.y -= vertical
         self.x -= horizontal
 
-    # reduces the speed only active if w is not pressed
-    def slowDown(self):
-        self.speed = max(self.speed - self.acceleration, 0)
-        self.move()
-
-
-class Tile(pygame.sprite.Sprite):
-    def __init__(self, image, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(image)
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = x, y
-
-    def draw(self, win):
-        pygame.blit(self.image, (self.rect.x, self.rect.y))
+    
+    def collide(self, mask, x = 0, y=0):
+        robo_mask = pygame.mask.from_surface(self.img)
+        offset = (int(self.x - x), int(self.y - y))
+        poi = mask.overlap(robo_mask, offset)
+        return poi
 
 
 class TileMap():
@@ -116,11 +109,27 @@ class TileMap():
             test.clear()
         file.close()
 
+    def create_Wall_Mask(self, win):
+        for i in range(TILECOUNT):
+            for j in range(TILECOUNT):
+                if self.background[i][j] == 1:
+                    win.blit(WALL, (j * TILEPIX, i * TILEPIX))
+        return pygame.mask.from_surface(win)
+
 
 class PlayerRobo(Robot):
 
     IMG = ROBO
     STARTPOS = (500, 500)
+
+    # reduces the speed only active if w is not pressed
+    def slowDown(self):
+        self.speed = max(self.speed - self.acceleration, 0)
+        self.move()
+
+    def bounce(self):
+        self.speed = -self.speed
+        self.move()
 
 
 def draw(win):
@@ -149,11 +158,10 @@ def movePlayer(player_robo):
         player_robo.slowDown()
 
 
-run = True
 map = TileMap()
-images = [(MAP, (0, 0)), (BORDER, (0, 0))]
 clock = pygame.time.Clock()
-player_robo = PlayerRobo(4, 4)
+player_robo = PlayerRobo(3, 3)
+WALLMASK = map.create_Wall_Mask(canvas)
 
 # main loop
 while run:
@@ -167,5 +175,8 @@ while run:
             break
 
     movePlayer(player_robo)
+
+    if player_robo.collide(WALLMASK) != None:
+        player_robo.bounce()
 
 pygame.quit()
