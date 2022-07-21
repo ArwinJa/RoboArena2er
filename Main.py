@@ -237,7 +237,7 @@ def movePlayer(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
-enemy1= EnemyRobo(3, 3)
+enemy1= EnemyRobo(2, 2)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
