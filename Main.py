@@ -1,4 +1,5 @@
-from turtle import left
+from shutil import move
+from turtle import left, right
 import pygame
 import math
 import csv
@@ -195,9 +196,23 @@ class EnemyRobo(Robot):
     STARTPOS = (750, 250)
 
 
-    def __init__(self, maxSpeed, rotSpeed):
+    def __init__(self, maxSpeed, rotSpeed, x, y, yMin, yMax):
         super().__init__(maxSpeed, rotSpeed)
         self.speed = maxSpeed
+        self.x = x
+        self.y = y
+        self.yMin = yMin
+        self.yMax = yMax
+
+    def move(self):
+        #super().rotate(left=True)
+        #moved = True
+        super().moveForward()
+        moved = True
+
+
+
+
 
 
 
@@ -207,10 +222,18 @@ def draw(win):
     enemy1.draw(win)
     pygame.display.update()
 
-def moveEnemyRobo(NPCRobo):
-    NPCRobo.rotate(left=True)
-    moved = True
-    NPCRobo.moveForward()
+
+
+#def moveEnemyRobo(NPCRobo):
+#    if EnemyRobo.self.y < EnemyRobo.self.yMin:
+#        NPCRobo.moveBackward()
+#    elif EnemyRobo.self.y > EnemyRobo.self.yMax:
+#        NPCRobo.moveForward()
+    
+    #NPCRobo.rotate(left=True)
+    #moved = True
+    #NPCRobo.moveForward()
+    #NPCRobo.self.x
 
 
 
@@ -237,7 +260,7 @@ def movePlayer(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
-enemy1= EnemyRobo(3, 3)
+enemy1= EnemyRobo(3, 3, 800, 250, 50, 500)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -261,7 +284,8 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
-    moveEnemyRobo(enemy1)
+    enemy1.move()
+    #moveEnemyRobo(enemy1)
 
     if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
