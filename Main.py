@@ -1,3 +1,4 @@
+from turtle import left
 import pygame
 import math
 import csv
@@ -106,12 +107,7 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = self.speed/1.6
         self.move()
 
-    def stunned(self):
-        if self.tenacity == TENACITY:
-            self.tenacity = 0
-            self.stun = 0
-            print("stun")
-            self.move()
+    
 
 
 class TileMap():
@@ -192,11 +188,30 @@ class PlayerRobo(Robot):
     IMG = ROBO
     STARTPOS = (500, 500)
 
+    
+class EnemyRobo(Robot):
+
+    IMG = ROBO
+    STARTPOS = (750, 250)
+
+
+    def __init__(self, maxSpeed, rotSpeed):
+        super().__init__(maxSpeed, rotSpeed)
+        self.speed = maxSpeed
+
+
 
 def draw(win):
     map.drawtiles(win)
     player_robo.draw(win)
+    enemy1.draw(win)
     pygame.display.update()
+
+def moveEnemyRobo(NPCRobo):
+    NPCRobo.rotate(left=True)
+    moved = True
+    NPCRobo.moveForward()
+
 
 
 def movePlayer(player_robo):
@@ -222,6 +237,7 @@ def movePlayer(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
+enemy1= EnemyRobo(3, 3)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -245,6 +261,7 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
+    moveEnemyRobo(enemy1)
 
     if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
