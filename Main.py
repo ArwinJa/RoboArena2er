@@ -6,6 +6,8 @@ from tools import blitRotate
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
 ROBO = pygame.image.load("img/Robot.png")
+ENEMYROBO = pygame.image.load("img/Enemy Robot.png")
+BULLET = pygame.image.load("img/Bullet.png")
 
 GRASS = pygame.image.load("img/Grass-Tiles.png")
 ELECTRIC = pygame.image.load("img/Electric-Tiles.png")
@@ -48,6 +50,7 @@ class Robot:  # Abstract class for player and ai robots
         self.acceleration = 0.1
         self.stun = STUNTICKS
         self.tenacity = TENACITY
+        self.ok = True
 
     # if either left or right is true will adjust the angle
     def rotate(self, left=False, right=False):
@@ -112,6 +115,39 @@ class Robot:  # Abstract class for player and ai robots
             self.stun = 0
             print("stun")
             self.move()
+
+    def stop(self):
+        if self.speed > 0:
+            self.speed = -1
+        elif self.speed < 0:
+            self.speed = 1
+        self.move()
+
+
+class bullet:
+    def __init__(self, robot):
+        self.direction = robot.angle
+        self.x = robot.x + 25
+        self.y = robot.y + 25
+        self.speed = robot.maxSpeed + 1
+        self.img = BULLET
+
+    def moveB(self):
+            radians = math.radians(self.direction)
+            vertical = math.cos(radians) * self.speed
+            horizontal = math.sin(radians) * self.speed
+
+            self.y -= vertical
+            self.x -= horizontal
+
+    def drawB(self, win):
+            win.blit(self.img, (self.x, self.y))
+
+    def collideB(self, mask, x=0, y=0):
+        bullet_mask = pygame.mask.from_surface(self.img)
+        offset = (int(self.x - x), int(self.y - y))
+        poi = mask.overlap(bullet_mask, offset)
+        return poi
 
 
 class TileMap():
@@ -195,6 +231,8 @@ class PlayerRobo(Robot):
 
 def draw(win):
     map.drawtiles(win)
+    for b in bullets:
+        b.drawB(win)
     player_robo.draw(win)
     pygame.display.update()
 
@@ -218,6 +256,19 @@ def movePlayer(player_robo):
     if not moved:
         player_robo.slowDown()
 
+def moveBullet(player_robo):
+
+    key = pygame.key.get_pressed()
+
+    if key[pygame.K_SPACE]:
+        if len(bullets) <= 4 and player_robo.ok:
+            bullets.append(bullet(player_robo))
+        player_robo.ok = False
+    if not key[pygame.K_SPACE]:
+        player_robo.ok = True
+
+
+
 
 map = TileMap()
 clock = pygame.time.Clock()
@@ -226,6 +277,7 @@ WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
+bullets = []
 
 # main loop
 while run:
@@ -245,6 +297,14 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
+    moveBullet(player_robo)
+
+    for b in bullets:
+        if b.collideB(WALLMASK) is not None:
+            bullets.remove(b)
+        else:
+            b.moveB()
+
 
     if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
@@ -254,5 +314,8 @@ while run:
 
     if player_robo.inTile(ELECTRICMASK):
         player_robo.stunned()
+    
+    if player_robo.collide(WATERMASK):
+        player_robo.stop()
 
 pygame.quit()
