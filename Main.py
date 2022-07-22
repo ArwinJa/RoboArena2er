@@ -43,7 +43,7 @@ TENACITY = 240
 run = True
 
 
-class GameInfo: # Game infromation like time Health etc
+class GameInfo:  # Game infromation like time Health etc
 
     def __init__(self,  score=0):
         self.score = score
