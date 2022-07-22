@@ -133,15 +133,15 @@ class bullet:
         self.img = BULLET
 
     def moveB(self):
-            radians = math.radians(self.direction)
-            vertical = math.cos(radians) * self.speed
-            horizontal = math.sin(radians) * self.speed
+        radians = math.radians(self.direction)
+        vertical = math.cos(radians) * self.speed
+        horizontal = math.sin(radians) * self.speed
 
-            self.y -= vertical
-            self.x -= horizontal
+        self.y -= vertical
+        self.x -= horizontal
 
     def drawB(self, win):
-            win.blit(self.img, (self.x, self.y))
+        win.blit(self.img, (self.x, self.y))
 
     def collideB(self, mask, x=0, y=0):
         bullet_mask = pygame.mask.from_surface(self.img)
@@ -256,6 +256,7 @@ def movePlayer(player_robo):
     if not moved:
         player_robo.slowDown()
 
+
 def moveBullet(player_robo):
 
     key = pygame.key.get_pressed()
@@ -266,8 +267,6 @@ def moveBullet(player_robo):
         player_robo.ok = False
     if not key[pygame.K_SPACE]:
         player_robo.ok = True
-
-
 
 
 map = TileMap()
@@ -305,7 +304,6 @@ while run:
         else:
             b.moveB()
 
-
     if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
 
@@ -314,7 +312,7 @@ while run:
 
     if player_robo.inTile(ELECTRICMASK):
         player_robo.stunned()
-    
+
     if player_robo.collide(WATERMASK):
         player_robo.stop()
 
