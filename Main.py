@@ -42,12 +42,14 @@ STUNTICKS = 90
 TENACITY = 240
 run = True
 
-class GameInfo:
+
+class GameInfo: # Game infromation like time Health etc
+
     def __init__(self,  score=0):
         self.score = score
         self.started = False
         self.gameStartTime = 0
-    
+
     def respawn(self):
         self.score = 0
         self.started = False
@@ -63,9 +65,6 @@ class GameInfo:
         return self.gameStartTime - time.time()
 
 
-    
-
-    
 class Robot:  # Abstract class for player and ai robots
 
     # initiator
@@ -269,7 +268,7 @@ def draw(win):
 def blitTextCenter(win, font, text):
     render = font.render(text, 1, (255, 255, 255))
     win.blit(render, (win.get_width()/2 - render.get_width()/2,
-    win.get_height()/2 - render.get_height()/2))
+                      win.get_height()/2 - render.get_height()/2))
 
 
 def movePlayer(player_robo):
@@ -320,8 +319,9 @@ while run:
 
     draw(Window)
 
+    # Pre Game start loop
     while not game_info.started:
-        blitTextCenter(Window, MAIN_FONT, f"Press any key to start the game")
+        blitTextCenter(Window, MAIN_FONT, "Press any key to start the game")
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -333,9 +333,9 @@ while run:
                 game_info.startGame()
 
     for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                break
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            break
 
     if player_robo.stun < STUNTICKS:
         player_robo.stun += 1
