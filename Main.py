@@ -1,7 +1,11 @@
 import pygame
 import math
 import csv
+import time
 from tools import blitRotate
+
+
+pygame.font.init()
 
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
@@ -19,6 +23,8 @@ WIDTH, HEIGHT = MAP.get_width(), MAP.get_height()
 Window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("RoboArena")
 
+MAIN_FONT = pygame.font.SysFont("comicsans", 44)
+
 # Surfaces for masks
 Wall = pygame.Surface((WIDTH, HEIGHT))
 Wall.set_colorkey((0, 0, 0))
@@ -35,6 +41,28 @@ TILEPIX = 25
 STUNTICKS = 90
 TENACITY = 240
 run = True
+
+
+class GameInfo:  # Game infromation like time Health etc
+
+    def __init__(self,  score=0):
+        self.score = score
+        self.started = False
+        self.gameStartTime = 0
+
+    def respawn(self):
+        self.score = 0
+        self.started = False
+        self.gameStartTime = 0
+
+    def startGame(self):
+        self.started = True
+        self.gameStartTime = time.time()
+
+    def getGameTime(self):
+        if not self.started:
+            return 0
+        return self.gameStartTime - time.time()
 
 
 class Robot:  # Abstract class for player and ai robots
@@ -237,6 +265,12 @@ def draw(win):
     pygame.display.update()
 
 
+def blitTextCenter(win, font, text):
+    render = font.render(text, 1, (255, 255, 255))
+    win.blit(render, (win.get_width()/2 - render.get_width()/2,
+                      win.get_height()/2 - render.get_height()/2))
+
+
 def movePlayer(player_robo):
 
     keys = pygame.key.get_pressed()
@@ -277,6 +311,7 @@ SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
 bullets = []
+game_info = GameInfo()
 
 # main loop
 while run:
@@ -284,9 +319,22 @@ while run:
 
     draw(Window)
 
+    # Pre Game start loop
+    while not game_info.started:
+        blitTextCenter(Window, MAIN_FONT, "Press any key to start the game")
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+
+            if event.type == pygame.KEYDOWN:
+                game_info.startGame()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            pygame.quit()
             break
 
     if player_robo.stun < STUNTICKS:
