@@ -5,6 +5,8 @@ import math
 import csv
 from tools import blitRotate
 
+pygame.init()
+
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
 ROBO = pygame.image.load("img/Robot.png")
@@ -34,6 +36,7 @@ TILECOUNT = 40
 TILEPIX = 25
 STUNTICKS = 90
 TENACITY = 240
+MOVETICKS = 90
 run = True
 
 
@@ -108,11 +111,7 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = self.speed/1.6
         self.move()
 
-<<<<<<< Updated upstream
-    def stunned(self):
-=======
     def stunned (self):
->>>>>>> Stashed changes
         if self.tenacity == TENACITY:
             self.tenacity = 0
             self.stun = 0
@@ -212,14 +211,17 @@ class EnemyRobo(Robot):
         self.y = y
         self.yMin = yMin
         self.yMax = yMax
+        self.moveTick = MOVETICKS
 
     def moveEnemyRobot(self):
-<<<<<<< Updated upstream
         if self.y < self.yMin:
-            self.speed *= -1
-        elif self.y > self.yMax:
-            self.speed *= -1
-        self.moveForward()
+            while self.moveTick < MOVETICKS:
+                self.rotate()
+        #elif self.y > self.yMax:
+        #    while not self.moveTick == MOVETICKS:
+        #        self.rotate()
+        else:
+          self.moveForward()
 
         
        # if self.y > self.yMax:
@@ -237,11 +239,6 @@ class EnemyRobo(Robot):
         #self.rotate(left=True)
         #moved = True
         #self.moveForward()
-=======
-        self.rotate(left=True)
-        moved = True
-        self.moveForward()
->>>>>>> Stashed changes
         #moved = True
 
 
@@ -305,6 +302,9 @@ while run:
 
     if player_robo.tenacity < TENACITY:
         player_robo.tenacity += 1
+
+    if enemy1.moveTick < MOVETICKS:
+        enemy1.moveTick += 1
 
     movePlayer(player_robo)
     enemy1.moveEnemyRobot()
