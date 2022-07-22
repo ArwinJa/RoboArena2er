@@ -108,7 +108,11 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = self.speed/1.6
         self.move()
 
+<<<<<<< Updated upstream
     def stunned(self):
+=======
+    def stunned (self):
+>>>>>>> Stashed changes
         if self.tenacity == TENACITY:
             self.tenacity = 0
             self.stun = 0
@@ -210,6 +214,7 @@ class EnemyRobo(Robot):
         self.yMax = yMax
 
     def moveEnemyRobot(self):
+<<<<<<< Updated upstream
         if self.y < self.yMin:
             self.speed *= -1
         elif self.y > self.yMax:
@@ -232,6 +237,11 @@ class EnemyRobo(Robot):
         #self.rotate(left=True)
         #moved = True
         #self.moveForward()
+=======
+        self.rotate(left=True)
+        moved = True
+        self.moveForward()
+>>>>>>> Stashed changes
         #moved = True
 
 
