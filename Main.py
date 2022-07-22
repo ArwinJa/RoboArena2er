@@ -10,6 +10,7 @@ pygame.init()
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
 ROBO = pygame.image.load("img/Robot.png")
+ENEMYROBO = pygame.image.load("img/Enemy Robot.png")
 
 GRASS = pygame.image.load("img/Grass-Tiles.png")
 ELECTRIC = pygame.image.load("img/Electric-Tiles.png")
@@ -36,7 +37,8 @@ TILECOUNT = 40
 TILEPIX = 25
 STUNTICKS = 90
 TENACITY = 240
-MOVETICKS = 90
+MOVETICKS = 60
+MOVETICKS2 = 30
 run = True
 
 
@@ -200,47 +202,53 @@ class PlayerRobo(Robot):
     
 class EnemyRobo(Robot):
 
-    IMG = ROBO
+    IMG = ENEMYROBO
     STARTPOS = (750, 250)
 
 
-    def __init__(self, maxSpeed, rotSpeed, x, y, yMin, yMax):
+    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax):
         super().__init__(maxSpeed, rotSpeed)
         self.speed = maxSpeed
         self.x = x
         self.y = y
+        self.xMin = xMin
+        self.xMax = xMax
         self.yMin = yMin
         self.yMax = yMax
-        self.moveTick = MOVETICKS
+        self.moveTick = 0
 
     def moveEnemyRobot(self):
-        if self.y < self.yMin:
-            while self.moveTick < MOVETICKS:
-                self.rotate()
-        #elif self.y > self.yMax:
-        #    while not self.moveTick == MOVETICKS:
-        #        self.rotate()
+        if self.y < self.yMin or self.y > self.yMax:
+            if self.moveTick < MOVETICKS:
+                self.moveTick += 1
+                self.rotate(left=True)
+            self.moveForward()
         else:
           self.moveForward()
+          self.moveTick = 0
+
+    def moveEnemy2(self):
+        if self.y < self.yMin or self.y > self.yMax:
+            if self.moveTick < MOVETICKS2:
+                self.moveTick += 1
+                self.rotate(left=True)
+            self.moveForward()
+        if self.x < self.xMin or self.x > self.xMax:
+            if self.moveTick < MOVETICKS2:
+                self.moveTick += 1
+                self.rotate(left=True)
+            self.moveForward()
+        else:
+          self.moveForward()
+          self.moveTick = 0
+
+
+
+    def moveEnemy3(self):
+        self.rotate(right=True)
 
         
-       # if self.y > self.yMax:
-       #     self.slowDown()
-       # else:
-       #     self.moveBackward()
-
-
-        
-        #self.moveForward
-        #moved = True
-        #if self.y < self.yMin:
-        #    self.moveBackward
-        
-        #self.rotate(left=True)
-        #moved = True
-        #self.moveForward()
-        #moved = True
-
+      
 
 
 
@@ -251,6 +259,8 @@ def draw(win):
     map.drawtiles(win)
     player_robo.draw(win)
     enemy1.draw(win)
+    enemy2.draw(win)
+    enemy3.draw(win)
     pygame.display.update()
 
 
@@ -280,7 +290,9 @@ def movePlayer(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
-enemy1= EnemyRobo(3, 3, 800, 500, 100, 500)
+enemy1= EnemyRobo(3, 3, 800, 500, 200, 800, 200, 500)
+enemy2 = EnemyRobo(5, 20, 300, 800, 1, 1, 500, 800)
+enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0 ,0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -303,12 +315,10 @@ while run:
     if player_robo.tenacity < TENACITY:
         player_robo.tenacity += 1
 
-    if enemy1.moveTick < MOVETICKS:
-        enemy1.moveTick += 1
-
     movePlayer(player_robo)
-    enemy1.moveEnemyRobot()
-    #moveEnemyRobo(enemy1)
+    enemy1.moveEnemy2()
+    enemy2.moveEnemyRobot()
+    enemy3.moveEnemy3()
 
     if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
