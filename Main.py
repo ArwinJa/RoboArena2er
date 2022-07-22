@@ -108,7 +108,12 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = self.speed/1.6
         self.move()
 
-    
+    def stunned(self):
+        if self.tenacity == TENACITY:
+            self.tenacity = 0
+            self.stun = 0
+            print("stun")
+            self.move()
 
 
 class TileMap():
@@ -204,11 +209,30 @@ class EnemyRobo(Robot):
         self.yMin = yMin
         self.yMax = yMax
 
-    def move(self):
-        #super().rotate(left=True)
+    def moveEnemyRobot(self):
+        if self.y < self.yMin:
+            self.speed *= -1
+        elif self.y > self.yMax:
+            self.speed *= -1
+        self.moveForward()
+
+        
+       # if self.y > self.yMax:
+       #     self.slowDown()
+       # else:
+       #     self.moveBackward()
+
+
+        
+        #self.moveForward
         #moved = True
-        super().moveForward()
-        moved = True
+        #if self.y < self.yMin:
+        #    self.moveBackward
+        
+        #self.rotate(left=True)
+        #moved = True
+        #self.moveForward()
+        #moved = True
 
 
 
@@ -223,17 +247,6 @@ def draw(win):
     pygame.display.update()
 
 
-
-#def moveEnemyRobo(NPCRobo):
-#    if EnemyRobo.self.y < EnemyRobo.self.yMin:
-#        NPCRobo.moveBackward()
-#    elif EnemyRobo.self.y > EnemyRobo.self.yMax:
-#        NPCRobo.moveForward()
-    
-    #NPCRobo.rotate(left=True)
-    #moved = True
-    #NPCRobo.moveForward()
-    #NPCRobo.self.x
 
 
 
@@ -260,7 +273,7 @@ def movePlayer(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
-enemy1= EnemyRobo(3, 3, 800, 250, 50, 500)
+enemy1= EnemyRobo(3, 3, 800, 500, 100, 500)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -284,7 +297,7 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
-    enemy1.move()
+    enemy1.moveEnemyRobot()
     #moveEnemyRobo(enemy1)
 
     if player_robo.collide(WALLMASK) is not None:
