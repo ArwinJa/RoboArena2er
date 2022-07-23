@@ -145,7 +145,7 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = self.speed/1.6
         self.move()
 
-    def stunned (self):
+    def stunned(self):
         if self.tenacity == TENACITY:
             self.tenacity = 0
             self.stun = 0
@@ -269,7 +269,6 @@ class EnemyRobo(Robot):
 
     IMG = ENEMYROBO
     STARTPOS = (750, 250)
-
 
     def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax):
         super().__init__(maxSpeed, rotSpeed)
