@@ -401,6 +401,7 @@ while run:
     if game_info.hearts == 0:
         game_info.gameOver = True
         game_info.respawn()
+        enemies.clear()
         enemies.append(enemy1)
         enemies.append(enemy2)
         enemies.append(enemy3)
