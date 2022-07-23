@@ -282,6 +282,7 @@ class EnemyRobo(Robot):
         self.yMax = yMax
         self.moveTick = 0
         self.angle = angle
+        self.current_point = 0
 
     
         
@@ -311,9 +312,6 @@ class EnemyRobo(Robot):
             self.angle = 0
         self.moveForward()
         
-
-   
-
 
     def moveEnemy2(self):
         if self.y < self.yMin:
@@ -377,6 +375,36 @@ class EnemyRobo(Robot):
 
         testx += mvx
         testy += mvy
+
+
+    def calculate_angle(self):
+        target_x = player_robo.x
+        target_y = player_robo.y
+        x_diff = target_x - self.x
+        y_diff = target_y - self.y
+
+        if y_diff == 0:
+            desired_radian_angle = math.pi / 2  ####
+        else:
+            desired_radian_angle = math.atan(x_diff / y_diff)
+
+        if target_y > self.y:
+            desired_radian_angle += math.pi
+
+        difference_in_angle = self.angle - math.degrees(desired_radian_angle)
+        if difference_in_angle >= 180:
+            difference_in_angle -= 360
+
+        if difference_in_angle > 0:
+            self.angle -= min(self.rotSpeed, abs(difference_in_angle))
+        else:
+            self.angle += min(self.rotSpeed, abs(difference_in_angle))
+
+
+    def moveHinterher2(self):
+
+        self.calculate_angle()
+        super().move()
         
 
 
@@ -437,11 +465,11 @@ def moveBullet(player_robo):
 
 map = TileMap()
 clock = pygame.time.Clock()
-player_robo = PlayerRobo(3, 3)
+player_robo = PlayerRobo(5, 3)
 enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
 enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
 enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
-enemy4 = EnemyRobo(3, 3, 50, 50, 0, 0, 0, 0, 0)
+enemy4 = EnemyRobo(2, 3, 50, 50, 0, 0, 0, 0, 0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -483,7 +511,7 @@ while run:
     enemy1.moveEnemy1()
     enemy2.moveEnemy4()
     enemy3.moveEnemy3()
-    enemy4.moveHinterher()
+    enemy4.moveHinterher2()
 
     moveBullet(player_robo)
 
