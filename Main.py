@@ -206,7 +206,7 @@ class EnemyRobo(Robot):
     STARTPOS = (750, 250)
 
 
-    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax):
+    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax, angle):
         super().__init__(maxSpeed, rotSpeed)
         self.speed = maxSpeed
         self.x = x
@@ -216,31 +216,69 @@ class EnemyRobo(Robot):
         self.yMin = yMin
         self.yMax = yMax
         self.moveTick = 0
+        self.angle = angle
 
-    def moveEnemyRobot(self):
-        if self.y < self.yMin or self.y > self.yMax:
-            if self.moveTick < MOVETICKS:
-                self.moveTick += 1
+    
+        
+
+    def moveEnemy1(self):               #4Eck
+        if self.y < self.yMin:
+            if self.angle < 90:
+                self.angle += 1
                 self.rotate(left=True)
-            self.moveForward()
-        else:
-          self.moveForward()
-          self.moveTick = 0
+                print(self.angle)
+        if self.x < self.xMin:
+            if self.angle < 180:
+                self.angle += 1
+                self.rotate(left=True)
+                print(self.angle)
+        if self.y > self.yMax:
+            if self.angle < 270:
+                self.angle += 1
+                self.rotate(left=True)
+                print(self.angle)
+        if self.x > self.xMax:
+            if self.angle <= 360:
+                self.angle += 1
+                self.rotate(left=True)
+                print(self.angle)
+        if self.angle == 360:
+            self.angle = 0
+        self.moveForward()
+        
+
+    def moveEnemy4(self):
+        if self.y < self.yMin:
+            if self.angle <= 180:
+                self.angle += 1
+                self.rotate(left=True)
+        if self.y > self.yMax:
+            if self.angle <= 360:
+                self.angle += 1
+                self.rotate(left=True)
+        if self.angle == 360:
+            self.angle = 0
+        self.moveForward()
+            
+
+
+
+
 
     def moveEnemy2(self):
-        if self.y < self.yMin or self.y > self.yMax:
-            if self.moveTick < MOVETICKS2:
-                self.moveTick += 1
+        if self.y < self.yMin:
+            if self.angle <= 180:
+                self.angle += 1
                 self.rotate(left=True)
             self.moveForward()
-        if self.x < self.xMin or self.x > self.xMax:
-            if self.moveTick < MOVETICKS2:
-                self.moveTick += 1
+        if self.y > self.yMax:
+            if self.angle <= 360:
+                self.angle += 1
                 self.rotate(left=True)
             self.moveForward()
-        else:
-          self.moveForward()
-          self.moveTick = 0
+        if self.angle == 360:
+            self.angle = 0
+        self.moveForward()
 
 
 
@@ -290,9 +328,9 @@ def movePlayer(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
-enemy1= EnemyRobo(3, 3, 800, 500, 200, 800, 200, 500)
-enemy2 = EnemyRobo(5, 20, 300, 800, 1, 1, 500, 800)
-enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0 ,0)
+enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
+enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
+enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -316,8 +354,8 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
-    enemy1.moveEnemy2()
-    enemy2.moveEnemyRobot()
+    enemy1.moveEnemy1()
+    enemy2.moveEnemy4()
     enemy3.moveEnemy3()
 
     if player_robo.collide(WALLMASK) is not None:
