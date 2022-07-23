@@ -306,16 +306,16 @@ class EnemyRobo(Robot):
                 self.rotate(left=True)
             self.moveForward()
         else:
-          self.moveForward()
-          self.moveTick = 0
+            self.moveForward()
+            self.moveTick = 0
 
     def moveEnemy3(self):
-        self.rotate(right=True)      
+        self.rotate(right=True)
 
 
 def scoreblit(win, font, text):
     render = font.render(text, 1, (255, 255, 255))
-    win.blit(render, (0 , TILEPIX - 5))
+    win.blit(render, (0, TILEPIX - 5))
 
 
 def draw(win):
@@ -389,7 +389,6 @@ while run:
 
     draw(Window)
 
-
     # Pre Game start loop
     while not game_info.started:
         blitTextCenter(Window, MAIN_FONT, "Press any key to start the game")
@@ -412,7 +411,8 @@ while run:
 
     while game_info.gameOver:
 
-        blitTextCenter(Window, MAIN_FONT, "GAME OVER!! Press any key to try again")
+        blitTextCenter(Window, MAIN_FONT,
+                       "GAME OVER!! Press any key to try again")
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
