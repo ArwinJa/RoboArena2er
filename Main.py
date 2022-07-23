@@ -1,5 +1,3 @@
-from shutil import move
-from turtle import left, right
 import pygame
 import math
 import csv
@@ -291,8 +289,8 @@ class EnemyRobo(Robot):
                 self.rotate(left=True)
             self.moveForward()
         else:
-          self.moveForward()
-          self.moveTick = 0
+            self.moveForward()
+            self.moveTick = 0
 
     def moveEnemy2(self):
         if self.y < self.yMin or self.y > self.yMax:
@@ -372,9 +370,9 @@ def moveBullet(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
-enemy1= EnemyRobo(3, 3, 800, 500, 200, 800, 200, 500)
+enemy1 = EnemyRobo(3, 3, 800, 500, 200, 800, 200, 500)
 enemy2 = EnemyRobo(5, 20, 300, 800, 1, 1, 500, 800)
-enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0 ,0)
+enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
