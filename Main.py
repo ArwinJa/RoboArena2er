@@ -351,7 +351,32 @@ class EnemyRobo(Robot):
         self.rotate(right=True)
 
         
-      
+    def moveHinterher(self):
+        global testx, testy
+        mx = player_robo.x
+        my = player_robo.y
+
+        #circle1 = pygame.draw.circle(Window, "blue",(testx, testy),30,0)
+
+
+        enemy4.x = testx
+        enemy4.y = testy
+
+
+
+
+        pygame.display.flip()
+
+        dx = mx - testx
+        dy = my - testy
+
+        angle = math.atan2(dx, dy)
+        mvx = math.sin(angle)
+        mvy = math.cos(angle)
+
+        testx += mvx
+        testy += mvy
+        
 
 
 
@@ -366,6 +391,7 @@ def draw(win):
     enemy1.draw(win)
     enemy2.draw(win)
     enemy3.draw(win)
+    enemy4.draw(win)
     pygame.display.update()
 
 
@@ -414,6 +440,7 @@ player_robo = PlayerRobo(3, 3)
 enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
 enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
 enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
+enemy4 = EnemyRobo(3, 3, 50, 50, 0, 0, 0, 0, 0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -455,28 +482,14 @@ while run:
     enemy1.moveEnemy1()
     enemy2.moveEnemy4()
     enemy3.moveEnemy3()
+    enemy4.moveHinterher()
 
     moveBullet(player_robo)
 
 
 
-    mx, my = pygame.mouse.get_pos()
-   #px = player_robo.self.x
-
-    circle1 = pygame.draw.circle(Window, "blue",(testx, testy),30,0)
-    circle2 = pygame.draw.circle(Window, "red",(mx,my),50, 0)
-
-    pygame.display.flip()
-
-    dx = mx - testx
-    dy = my - testy
-
-    angle = math.atan2(dx, dy)
-    mvx = math.sin(angle)
-    mvy = math.cos(angle)
-
-    testx += mvx
-    testy += mvy
+    #mx, my = pygame.mouse.get_pos()
+    
 
 
 
