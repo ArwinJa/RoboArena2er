@@ -287,34 +287,6 @@ class EnemyRobo(Robot):
         (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
 
 
-    
-        
-
-    def moveEnemy1(self):               #4Eck
-        if self.y < self.yMin:
-            if self.angle < 90:
-                self.angle += 1
-                self.rotate(left=True)
-              #  print(self.angle)
-        if self.x < self.xMin:
-            if self.angle < 180:
-                self.angle += 1
-                self.rotate(left=True)
-               # print(self.angle)
-        if self.y > self.yMax:
-            if self.angle < 270:
-                self.angle += 1
-                self.rotate(left=True)
-               # print(self.angle)
-        if self.x > self.xMax:
-            if self.angle < 360:
-                self.angle += 1
-                self.rotate(left=True)
-               # print(self.angle)
-        if self.angle == 360:
-            self.angle = 0
-        self.moveForward()
-        
 
     def moveEnemy2(self):
         if self.y < self.yMin:
