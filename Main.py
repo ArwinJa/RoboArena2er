@@ -291,43 +291,28 @@ class EnemyRobo(Robot):
             if self.angle < 90:
                 self.angle += 1
                 self.rotate(left=True)
-                print(self.angle)
+              #  print(self.angle)
         if self.x < self.xMin:
             if self.angle < 180:
                 self.angle += 1
                 self.rotate(left=True)
-                print(self.angle)
+               # print(self.angle)
         if self.y > self.yMax:
             if self.angle < 270:
                 self.angle += 1
                 self.rotate(left=True)
-                print(self.angle)
+               # print(self.angle)
         if self.x > self.xMax:
             if self.angle < 360:
                 self.angle += 1
                 self.rotate(left=True)
-                print(self.angle)
+               # print(self.angle)
         if self.angle == 360:
             self.angle = 0
         self.moveForward()
         
 
-    def moveEnemy4(self):
-        if self.y < self.yMin:
-            if self.angle <= 180:
-                self.angle += 1
-                self.rotate(left=True)
-        if self.y > self.yMax:
-            if self.angle <= 360:
-                self.angle += 1
-                self.rotate(left=True)
-        if self.angle == 360:
-            self.angle = 0
-        self.moveForward()
-            
-
-
-
+   
 
 
     def moveEnemy2(self):
@@ -346,9 +331,22 @@ class EnemyRobo(Robot):
         self.moveForward()
 
 
-
     def moveEnemy3(self):
         self.rotate(right=True)
+
+
+    def moveEnemy4(self):
+        if self.y < self.yMin:
+            if self.angle <= 180:
+                self.angle += 1
+                self.rotate(left=True)
+        if self.y > self.yMax:
+            if self.angle <= 360:
+                self.angle += 1
+                self.rotate(left=True)
+        if self.angle == 360:
+            self.angle = 0
+        self.moveForward()
 
         
     def moveHinterher(self):
@@ -356,14 +354,8 @@ class EnemyRobo(Robot):
         mx = player_robo.x
         my = player_robo.y
 
-        #circle1 = pygame.draw.circle(Window, "blue",(testx, testy),30,0)
-
-
         enemy4.x = testx
         enemy4.y = testy
-
-
-
 
         pygame.display.flip()
 
@@ -371,8 +363,17 @@ class EnemyRobo(Robot):
         dy = my - testy
 
         angle = math.atan2(dx, dy)
+        self.angle = angle
         mvx = math.sin(angle)
         mvy = math.cos(angle)
+
+      #  if self.angle < angle:
+      #      self.angle += 1
+      #      self.rotate(right=True)
+      #  if self.angle > angle:
+      #      self.angle -=1
+      #      self.rotate(right=True)
+      #      print(self.angle)
 
         testx += mvx
         testy += mvy
