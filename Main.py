@@ -1,3 +1,5 @@
+from shutil import move
+from turtle import left, right
 import pygame
 import math
 import csv
@@ -6,6 +8,7 @@ from tools import blitRotate
 
 
 pygame.font.init()
+pygame.init()
 
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
@@ -40,6 +43,8 @@ TILECOUNT = 40
 TILEPIX = 25
 STUNTICKS = 90
 TENACITY = 240
+MOVETICKS = 60
+MOVETICKS2 = 30
 run = True
 
 
@@ -137,7 +142,7 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = self.speed/1.6
         self.move()
 
-    def stunned(self):
+    def stunned (self):
         if self.tenacity == TENACITY:
             self.tenacity = 0
             self.stun = 0
@@ -256,12 +261,70 @@ class PlayerRobo(Robot):
     IMG = ROBO
     STARTPOS = (500, 500)
 
+    
+class EnemyRobo(Robot):
+
+    IMG = ENEMYROBO
+    STARTPOS = (750, 250)
+
+
+    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax):
+        super().__init__(maxSpeed, rotSpeed)
+        self.speed = maxSpeed
+        self.x = x
+        self.y = y
+        self.xMin = xMin
+        self.xMax = xMax
+        self.yMin = yMin
+        self.yMax = yMax
+        self.moveTick = 0
+
+    def moveEnemyRobot(self):
+        if self.y < self.yMin or self.y > self.yMax:
+            if self.moveTick < MOVETICKS:
+                self.moveTick += 1
+                self.rotate(left=True)
+            self.moveForward()
+        else:
+          self.moveForward()
+          self.moveTick = 0
+
+    def moveEnemy2(self):
+        if self.y < self.yMin or self.y > self.yMax:
+            if self.moveTick < MOVETICKS2:
+                self.moveTick += 1
+                self.rotate(left=True)
+            self.moveForward()
+        if self.x < self.xMin or self.x > self.xMax:
+            if self.moveTick < MOVETICKS2:
+                self.moveTick += 1
+                self.rotate(left=True)
+            self.moveForward()
+        else:
+          self.moveForward()
+          self.moveTick = 0
+
+
+
+    def moveEnemy3(self):
+        self.rotate(right=True)
+
+        
+      
+
+
+
+
+
 
 def draw(win):
     map.drawtiles(win)
     for b in bullets:
         b.drawB(win)
     player_robo.draw(win)
+    enemy1.draw(win)
+    enemy2.draw(win)
+    enemy3.draw(win)
     pygame.display.update()
 
 
@@ -269,6 +332,7 @@ def blitTextCenter(win, font, text):
     render = font.render(text, 1, (255, 255, 255))
     win.blit(render, (win.get_width()/2 - render.get_width()/2,
                       win.get_height()/2 - render.get_height()/2))
+
 
 
 def movePlayer(player_robo):
@@ -306,6 +370,9 @@ def moveBullet(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
+enemy1= EnemyRobo(3, 3, 800, 500, 200, 800, 200, 500)
+enemy2 = EnemyRobo(5, 20, 300, 800, 1, 1, 500, 800)
+enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0 ,0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -344,6 +411,11 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
+
+    enemy1.moveEnemy2()
+    enemy2.moveEnemyRobot()
+    enemy3.moveEnemy3()
+
     moveBullet(player_robo)
 
     for b in bullets:
