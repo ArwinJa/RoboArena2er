@@ -3,14 +3,18 @@ from turtle import left, right
 import pygame
 import math
 import csv
+import time
 from tools import blitRotate
 
+
+pygame.font.init()
 pygame.init()
 
 MAP = pygame.image.load("img/Karte.png")
 BORDER = pygame.image.load("img/Mauer.png")
 ROBO = pygame.image.load("img/Robot.png")
 ENEMYROBO = pygame.image.load("img/Enemy Robot.png")
+BULLET = pygame.image.load("img/Bullet.png")
 
 GRASS = pygame.image.load("img/Grass-Tiles.png")
 ELECTRIC = pygame.image.load("img/Electric-Tiles.png")
@@ -21,6 +25,8 @@ WATER = pygame.image.load("img/Water-Tiles.png")
 WIDTH, HEIGHT = MAP.get_width(), MAP.get_height()
 Window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("RoboArena")
+
+MAIN_FONT = pygame.font.SysFont("comicsans", 44)
 
 # Surfaces for masks
 Wall = pygame.Surface((WIDTH, HEIGHT))
@@ -42,6 +48,28 @@ MOVETICKS2 = 30
 run = True
 
 
+class GameInfo:  # Game infromation like time Health etc
+
+    def __init__(self,  score=0):
+        self.score = score
+        self.started = False
+        self.gameStartTime = 0
+
+    def respawn(self):
+        self.score = 0
+        self.started = False
+        self.gameStartTime = 0
+
+    def startGame(self):
+        self.started = True
+        self.gameStartTime = time.time()
+
+    def getGameTime(self):
+        if not self.started:
+            return 0
+        return self.gameStartTime - time.time()
+
+
 class Robot:  # Abstract class for player and ai robots
 
     # initiator
@@ -55,6 +83,7 @@ class Robot:  # Abstract class for player and ai robots
         self.acceleration = 0.1
         self.stun = STUNTICKS
         self.tenacity = TENACITY
+        self.ok = True
 
     # if either left or right is true will adjust the angle
     def rotate(self, left=False, right=False):
@@ -119,6 +148,39 @@ class Robot:  # Abstract class for player and ai robots
             self.stun = 0
             print("stun")
             self.move()
+
+    def stop(self):
+        if self.speed > 0:
+            self.speed = -1
+        elif self.speed < 0:
+            self.speed = 1
+        self.move()
+
+
+class bullet:
+    def __init__(self, robot):
+        self.direction = robot.angle
+        self.x = robot.x + 25
+        self.y = robot.y + 25
+        self.speed = robot.maxSpeed + 1
+        self.img = BULLET
+
+    def moveB(self):
+        radians = math.radians(self.direction)
+        vertical = math.cos(radians) * self.speed
+        horizontal = math.sin(radians) * self.speed
+
+        self.y -= vertical
+        self.x -= horizontal
+
+    def drawB(self, win):
+        win.blit(self.img, (self.x, self.y))
+
+    def collideB(self, mask, x=0, y=0):
+        bullet_mask = pygame.mask.from_surface(self.img)
+        offset = (int(self.x - x), int(self.y - y))
+        poi = mask.overlap(bullet_mask, offset)
+        return poi
 
 
 class TileMap():
@@ -295,6 +357,8 @@ class EnemyRobo(Robot):
 
 def draw(win):
     map.drawtiles(win)
+    for b in bullets:
+        b.drawB(win)
     player_robo.draw(win)
     enemy1.draw(win)
     enemy2.draw(win)
@@ -302,6 +366,10 @@ def draw(win):
     pygame.display.update()
 
 
+def blitTextCenter(win, font, text):
+    render = font.render(text, 1, (255, 255, 255))
+    win.blit(render, (win.get_width()/2 - render.get_width()/2,
+                      win.get_height()/2 - render.get_height()/2))
 
 
 
@@ -325,6 +393,18 @@ def movePlayer(player_robo):
         player_robo.slowDown()
 
 
+def moveBullet(player_robo):
+
+    key = pygame.key.get_pressed()
+
+    if key[pygame.K_SPACE]:
+        if len(bullets) <= 4 and player_robo.ok:
+            bullets.append(bullet(player_robo))
+        player_robo.ok = False
+    if not key[pygame.K_SPACE]:
+        player_robo.ok = True
+
+
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(3, 3)
@@ -335,6 +415,8 @@ WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
+bullets = []
+game_info = GameInfo()
 
 # main loop
 while run:
@@ -342,9 +424,22 @@ while run:
 
     draw(Window)
 
+    # Pre Game start loop
+    while not game_info.started:
+        blitTextCenter(Window, MAIN_FONT, "Press any key to start the game")
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+
+            if event.type == pygame.KEYDOWN:
+                game_info.startGame()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            pygame.quit()
             break
 
     if player_robo.stun < STUNTICKS:
@@ -358,6 +453,14 @@ while run:
     enemy2.moveEnemy4()
     enemy3.moveEnemy3()
 
+    moveBullet(player_robo)
+
+    for b in bullets:
+        if b.collideB(WALLMASK) is not None:
+            bullets.remove(b)
+        else:
+            b.moveB()
+
     if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
 
@@ -366,5 +469,8 @@ while run:
 
     if player_robo.inTile(ELECTRICMASK):
         player_robo.stunned()
+
+    if player_robo.collide(WATERMASK):
+        player_robo.stop()
 
 pygame.quit()
