@@ -47,8 +47,8 @@ TENACITY = 240
 MOVETICKS = 60
 MOVETICKS2 = 30
 run = True
-testx = 100
-testy = 100
+
+
 
 
 class GameInfo:  # Game infromation like time Health etc
@@ -283,6 +283,9 @@ class EnemyRobo(Robot):
         self.moveTick = 0
         self.angle = angle
         self.current_point = 0
+        self.path = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 731), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
+        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
+
 
     
         
@@ -347,36 +350,6 @@ class EnemyRobo(Robot):
         self.moveForward()
 
         
-    def moveHinterher(self):
-        global testx, testy
-        mx = player_robo.x
-        my = player_robo.y
-
-        enemy4.x = testx
-        enemy4.y = testy
-
-        pygame.display.flip()
-
-        dx = mx - testx
-        dy = my - testy
-
-        angle = math.atan2(dx, dy)
-        self.angle = angle
-        mvx = math.sin(angle)
-        mvy = math.cos(angle)
-
-      #  if self.angle < angle:
-      #      self.angle += 1
-      #      self.rotate(right=True)
-      #  if self.angle > angle:
-      #      self.angle -=1
-      #      self.rotate(right=True)
-      #      print(self.angle)
-
-        testx += mvx
-        testy += mvy
-
-
     def calculate_angle(self):
         target_x = player_robo.x
         target_y = player_robo.y
@@ -401,15 +374,52 @@ class EnemyRobo(Robot):
             self.angle += min(self.rotSpeed, abs(difference_in_angle))
 
 
-    def moveHinterher2(self):
+    def moveHinterher(self):
 
         self.calculate_angle()
         super().move()
         
 
+    def calculate_angle2(self):
+
+        target_x, target_y = self.path[self.current_point]
+        x_diff = target_x - self.x
+        y_diff = target_y - self.y
+
+        if y_diff == 0:
+            desired_radian_angle = math.pi / 2  ####
+        else:
+            desired_radian_angle = math.atan(x_diff / y_diff)
+
+        if target_y > self.y:
+            desired_radian_angle += math.pi
+
+        difference_in_angle = self.angle - math.degrees(desired_radian_angle)
+        if difference_in_angle >= 180:
+            difference_in_angle -= 360
+
+        if difference_in_angle > 0:
+            self.angle -= min(self.rotSpeed, abs(difference_in_angle))
+        else:
+            self.angle += min(self.rotSpeed, abs(difference_in_angle))
 
 
+    def update_path_point(self):
+        target = self.path[self.current_point]
+        rect = pygame.Rect(
+            self.x, self.y, self.img.get_width(), self.img.get_height())
+        if rect.collidepoint(*target):
+            self.current_point += 1
+        if self.current_point == 22:
+            self.current_point = 0
 
+    def moveEnemy5(self):
+        if self.current_point >= len(self.path):
+            return
+
+        self.calculate_angle2()
+        self.update_path_point()
+        super().move()
 
 
 def draw(win):
@@ -465,11 +475,11 @@ def moveBullet(player_robo):
 
 map = TileMap()
 clock = pygame.time.Clock()
-player_robo = PlayerRobo(5, 3)
+player_robo = PlayerRobo(4, 3)
 enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
 enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
 enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
-enemy4 = EnemyRobo(2, 3, 50, 50, 0, 0, 0, 0, 0)
+enemy4 = EnemyRobo(2, 3, 100, 100, 0, 0, 0, 0, 0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -508,20 +518,12 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
-    enemy1.moveEnemy1()
+    enemy1.moveEnemy5()
     enemy2.moveEnemy4()
     enemy3.moveEnemy3()
-    enemy4.moveHinterher2()
+    enemy4.moveHinterher()
 
     moveBullet(player_robo)
-
-
-
-    #mx, my = pygame.mouse.get_pos()
-    
-
-
-
 
     for b in bullets:
         if b.collideB(WALLMASK) is not None:
