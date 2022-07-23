@@ -1,11 +1,12 @@
+#from curses import window
 from shutil import move
-from turtle import left, right
+from turtle import circle, left, right
 import pygame
 import math
 import csv
 import time
 from tools import blitRotate
-
+from pygame.locals import*
 
 pygame.font.init()
 pygame.init()
@@ -46,6 +47,8 @@ TENACITY = 240
 MOVETICKS = 60
 MOVETICKS2 = 30
 run = True
+testx = 100
+testy = 100
 
 
 class GameInfo:  # Game infromation like time Health etc
@@ -300,7 +303,7 @@ class EnemyRobo(Robot):
                 self.rotate(left=True)
                 print(self.angle)
         if self.x > self.xMax:
-            if self.angle <= 360:
+            if self.angle < 360:
                 self.angle += 1
                 self.rotate(left=True)
                 print(self.angle)
@@ -454,6 +457,29 @@ while run:
     enemy3.moveEnemy3()
 
     moveBullet(player_robo)
+
+
+
+    mx, my = pygame.mouse.get_pos()
+   #px = player_robo.self.x
+
+    circle1 = pygame.draw.circle(Window, "blue",(testx, testy),30,0)
+    circle2 = pygame.draw.circle(Window, "red",(mx,my),50, 0)
+
+    pygame.display.flip()
+
+    dx = mx - testx
+    dy = my - testy
+
+    angle = math.atan2(dx, dy)
+    mvx = math.sin(angle)
+    mvy = math.cos(angle)
+
+    testx += mvx
+    testy += mvy
+
+
+
 
     for b in bullets:
         if b.collideB(WALLMASK) is not None:
