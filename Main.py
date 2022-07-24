@@ -49,6 +49,9 @@ TENACITY = 240
 MOVETICKS = 60
 MOVETICKS2 = 30
 run = True
+PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 731), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
+        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
+
 
 
 
@@ -276,61 +279,20 @@ class EnemyRobo(Robot):
     STARTPOS = (750, 250)
 
 
-    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax, angle):
+    def __init__(self, maxSpeed, rotSpeed, x, y, path=[]):
         super().__init__(maxSpeed, rotSpeed)
         self.speed = 0
         self.acceleration = 0.1
         self.x = x
         self.y = y
-        self.xMin = xMin
-        self.xMax = xMax
-        self.yMin = yMin
-        self.yMax = yMax
         self.moveTick = 0
         self.tenacity = TENACITY
         self.stun = STUNTICKS
-        self.angle = angle
+        #self.angle = angle
         self.current_point = 0
-        self.path = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 731), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
-        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
-
-
-
-    def moveEnemy2(self):
-        if self.y < self.yMin:
-            if self.angle <= 180:
-                self.angle += 1
-                self.rotate(left=True)
-            self.moveForward()
-        if self.y > self.yMax:
-            if self.angle <= 360:
-                self.angle += 1
-                self.rotate(left=True)
-            self.moveForward()
-        if self.angle == 360:
-            self.angle = 0
-        self.moveForward()
-
-
-    def moveEnemy3(self):
-        self.rotate(right=True)
-
-
-
-    def moveEnemy4(self):
-        if self.y < self.yMin:
-            if self.angle <= 180:
-                self.angle += 1
-                self.rotate(left=True)
-        if self.y > self.yMax:
-            if self.angle <= 360:
-                self.angle += 1
-                self.rotate(left=True)
-        if self.angle == 360:
-            self.angle = 0
-        self.moveForward()
-
+        self.path = path
         
+
     def calculate_angle(self):
         target_x = player_robo.x
         target_y = player_robo.y
@@ -396,7 +358,7 @@ class EnemyRobo(Robot):
         if self.current_point == 22:
             self.current_point = 0
 
-    def moveEnemy5(self):
+    def moveEnemy(self):
         if self.current_point >= len(self.path):
             return
 
@@ -480,10 +442,10 @@ def roboTile(player_robo):
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 3)
-enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
-enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
-enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
-enemy4 = EnemyRobo(4, 3, 100, 100, 0, 0, 0, 0, 0)
+enemy1= EnemyRobo(3, 5, 800, 500, PATH)
+enemy2 = EnemyRobo(5, 5, 400, 800, PATH)
+enemy3 = EnemyRobo(3, 5, 100, 100, PATH)
+enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        #Hinterher
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -551,9 +513,9 @@ while run:
             e.tenacity += 1
 
     movePlayer(player_robo)
-    enemy1.moveEnemy5()
-    enemy2.moveEnemy4()
-    enemy3.moveEnemy3()
+    enemy1.moveEnemy()
+    enemy2.moveEnemy()
+    enemy3.moveEnemy()
     enemy4.moveHinterher()
 
     moveBullet(player_robo)
