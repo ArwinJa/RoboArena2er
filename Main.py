@@ -1,9 +1,12 @@
+#from curses import window
+from shutil import move
+from turtle import circle, left, right
 import pygame
 import math
 import csv
 import time
 from tools import blitRotate
-
+from pygame.locals import*
 
 pygame.font.init()
 pygame.init()
@@ -46,6 +49,8 @@ TENACITY = 240
 MOVETICKS = 60
 MOVETICKS2 = 30
 run = True
+
+
 
 
 class GameInfo:  # Game infromation like time Health etc
@@ -270,7 +275,8 @@ class EnemyRobo(Robot):
     IMG = ENEMYROBO
     STARTPOS = (750, 250)
 
-    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax):
+
+    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax, angle):
         super().__init__(maxSpeed, rotSpeed)
         self.speed = maxSpeed
         self.x = x
@@ -280,34 +286,119 @@ class EnemyRobo(Robot):
         self.yMin = yMin
         self.yMax = yMax
         self.moveTick = 0
+        self.angle = angle
+        self.current_point = 0
+        self.path = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 731), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
+        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
 
-    def moveEnemyRobot(self):
-        if self.y < self.yMin or self.y > self.yMax:
-            if self.moveTick < MOVETICKS:
-                self.moveTick += 1
-                self.rotate(left=True)
-            self.moveForward()
-        else:
-            self.moveForward()
-            self.moveTick = 0
+
 
     def moveEnemy2(self):
-        if self.y < self.yMin or self.y > self.yMax:
-            if self.moveTick < MOVETICKS2:
-                self.moveTick += 1
+        if self.y < self.yMin:
+            if self.angle <= 180:
+                self.angle += 1
                 self.rotate(left=True)
             self.moveForward()
-        if self.x < self.xMin or self.x > self.xMax:
-            if self.moveTick < MOVETICKS2:
-                self.moveTick += 1
+        if self.y > self.yMax:
+            if self.angle <= 360:
+                self.angle += 1
                 self.rotate(left=True)
             self.moveForward()
-        else:
-            self.moveForward()
-            self.moveTick = 0
+        if self.angle == 360:
+            self.angle = 0
+        self.moveForward()
+
 
     def moveEnemy3(self):
         self.rotate(right=True)
+
+
+
+    def moveEnemy4(self):
+        if self.y < self.yMin:
+            if self.angle <= 180:
+                self.angle += 1
+                self.rotate(left=True)
+        if self.y > self.yMax:
+            if self.angle <= 360:
+                self.angle += 1
+                self.rotate(left=True)
+        if self.angle == 360:
+            self.angle = 0
+        self.moveForward()
+
+        
+    def calculate_angle(self):
+        target_x = player_robo.x
+        target_y = player_robo.y
+        x_diff = target_x - self.x
+        y_diff = target_y - self.y
+
+        if y_diff == 0:
+            desired_radian_angle = math.pi / 2  ####
+        else:
+            desired_radian_angle = math.atan(x_diff / y_diff)
+
+        if target_y > self.y:
+            desired_radian_angle += math.pi
+
+        difference_in_angle = self.angle - math.degrees(desired_radian_angle)
+        if difference_in_angle >= 180:
+            difference_in_angle -= 360
+
+        if difference_in_angle > 0:
+            self.angle -= min(self.rotSpeed, abs(difference_in_angle))
+        else:
+            self.angle += min(self.rotSpeed, abs(difference_in_angle))
+
+
+    def moveHinterher(self):
+
+        self.calculate_angle()
+        super().move()
+        
+
+    def calculate_angle2(self):
+
+        target_x, target_y = self.path[self.current_point]
+        x_diff = target_x - self.x
+        y_diff = target_y - self.y
+
+        if y_diff == 0:
+            desired_radian_angle = math.pi / 2  ####
+        else:
+            desired_radian_angle = math.atan(x_diff / y_diff)
+
+        if target_y > self.y:
+            desired_radian_angle += math.pi
+
+        difference_in_angle = self.angle - math.degrees(desired_radian_angle)
+        if difference_in_angle >= 180:
+            difference_in_angle -= 360
+
+        if difference_in_angle > 0:
+            self.angle -= min(self.rotSpeed, abs(difference_in_angle))
+        else:
+            self.angle += min(self.rotSpeed, abs(difference_in_angle))
+
+
+    def update_path_point(self):
+        target = self.path[self.current_point]
+        rect = pygame.Rect(
+            self.x, self.y, self.img.get_width(), self.img.get_height())
+        if rect.collidepoint(*target):
+            self.current_point += 1
+        if self.current_point == 22:
+            self.current_point = 0
+
+    def moveEnemy5(self):
+        if self.current_point >= len(self.path):
+            return
+
+        self.calculate_angle2()
+        self.update_path_point()
+        super().move()
+
 
 
 def scoreblit(win, font, text):
@@ -368,16 +459,17 @@ def moveBullet(player_robo):
 
 map = TileMap()
 clock = pygame.time.Clock()
-player_robo = PlayerRobo(3, 3)
-enemy1 = EnemyRobo(3, 3, 800, 500, 200, 800, 200, 500)
-enemy2 = EnemyRobo(5, 20, 300, 800, 1, 1, 500, 800)
-enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0)
+player_robo = PlayerRobo(4, 3)
+enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
+enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
+enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
+enemy4 = EnemyRobo(2, 3, 100, 100, 0, 0, 0, 0, 0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
 bullets = []
-enemies = [enemy1, enemy2, enemy3]
+enemies = [enemy1, enemy2, enemy3, enemy4]
 game_info = GameInfo()
 
 # main loop
@@ -431,10 +523,10 @@ while run:
         player_robo.tenacity += 1
 
     movePlayer(player_robo)
-
-    enemy1.moveEnemy2()
-    enemy2.moveEnemyRobot()
+    enemy1.moveEnemy5()
+    enemy2.moveEnemy4()
     enemy3.moveEnemy3()
+    enemy4.moveHinterher()
 
     moveBullet(player_robo)
 
