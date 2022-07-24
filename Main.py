@@ -1,9 +1,12 @@
+#from curses import window
+from shutil import move
+from turtle import circle, left, right
 import pygame
 import math
 import csv
 import time
 from tools import blitRotate
-
+from pygame.locals import*
 
 pygame.font.init()
 pygame.init()
@@ -43,9 +46,13 @@ TILECOUNT = 40
 TILEPIX = 25
 STUNTICKS = 90
 TENACITY = 240
-MOVETICKS = 60
-MOVETICKS2 = 30
+RESPAWN = 90
 run = True
+PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
+        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
+
+
+
 
 
 class GameInfo:  # Game infromation like time Health etc
@@ -154,7 +161,7 @@ class Robot:  # Abstract class for player and ai robots
             self.move()
 
     def stop(self):
-        if self.speed > 0:
+        if self.speed >= 0:
             self.speed = -1
         elif self.speed < 0:
             self.speed = 1
@@ -271,44 +278,93 @@ class EnemyRobo(Robot):
     IMG = ENEMYROBO
     STARTPOS = (750, 250)
 
-    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax):
+
+    def __init__(self, maxSpeed, rotSpeed, x, y, path=[]):
         super().__init__(maxSpeed, rotSpeed)
-        self.speed = maxSpeed
+        self.speed = 0
+        self.acceleration = 0.1
         self.x = x
         self.y = y
-        self.xMin = xMin
-        self.xMax = xMax
-        self.yMin = yMin
-        self.yMax = yMax
         self.moveTick = 0
+        self.tenacity = TENACITY
+        self.stun = STUNTICKS
+        self.current_point = 0
+        self.path = path
+        
 
-    def moveEnemyRobot(self):
-        if self.y < self.yMin or self.y > self.yMax:
-            if self.moveTick < MOVETICKS:
-                self.moveTick += 1
-                self.rotate(left=True)
-            self.moveForward()
+    def calculate_angle(self):
+        target_x = player_robo.x
+        target_y = player_robo.y
+        x_diff = target_x - self.x
+        y_diff = target_y - self.y
+
+        if y_diff == 0:
+            desired_radian_angle = math.pi / 2  ####
         else:
-            self.moveForward()
-            self.moveTick = 0
+            desired_radian_angle = math.atan(x_diff / y_diff)
 
-    def moveEnemy2(self):
-        if self.y < self.yMin or self.y > self.yMax:
-            if self.moveTick < MOVETICKS2:
-                self.moveTick += 1
-                self.rotate(left=True)
-            self.moveForward()
-        if self.x < self.xMin or self.x > self.xMax:
-            if self.moveTick < MOVETICKS2:
-                self.moveTick += 1
-                self.rotate(left=True)
-            self.moveForward()
+        if target_y > self.y:
+            desired_radian_angle += math.pi
+
+        difference_in_angle = self.angle - math.degrees(desired_radian_angle)
+        if difference_in_angle >= 180:
+            difference_in_angle -= 360
+
+        if difference_in_angle > 0:
+            self.angle -= min(self.rotSpeed, abs(difference_in_angle))
         else:
-            self.moveForward()
-            self.moveTick = 0
+            self.angle += min(self.rotSpeed, abs(difference_in_angle))
 
-    def moveEnemy3(self):
-        self.rotate(right=True)
+
+    def moveHinterher(self):
+
+        self.calculate_angle()
+        if self.stun == STUNTICKS:
+            self.moveForward()
+            
+        
+
+    def calculate_angle2(self):
+
+        target_x, target_y = self.path[self.current_point]
+        x_diff = target_x - self.x
+        y_diff = target_y - self.y
+
+        if y_diff == 0:
+            desired_radian_angle = math.pi / 2  ####
+        else:
+            desired_radian_angle = math.atan(x_diff / y_diff)
+
+        if target_y > self.y:
+            desired_radian_angle += math.pi
+
+        difference_in_angle = self.angle - math.degrees(desired_radian_angle)
+        if difference_in_angle >= 180:
+            difference_in_angle -= 360
+
+        if difference_in_angle > 0:
+            self.angle -= min(self.rotSpeed, abs(difference_in_angle))
+        else:
+            self.angle += min(self.rotSpeed, abs(difference_in_angle))
+
+
+    def update_path_point(self):
+        target = self.path[self.current_point]
+        rect = pygame.Rect(
+            self.x, self.y, self.img.get_width(), self.img.get_height())
+        if rect.collidepoint(*target):
+            self.current_point += 1
+        if self.current_point == 22:
+            self.current_point = 0
+
+    def moveEnemy(self):
+        if self.current_point >= len(self.path):
+            return
+
+        self.calculate_angle2()
+        self.update_path_point()
+        self.moveForward()
+
 
 
 def scoreblit(win, font, text):
@@ -326,6 +382,21 @@ def draw(win):
     for i in range(game_info.hearts):
         win.blit(HEART, (i * TILEPIX, 0))
     scoreblit(win, SCORE_FONT, f"score: {game_info.score}")
+    if len(enemies) < 4:
+        enemy4.draw(win)
+       # enemy4.moveHinterher()
+
+
+       # enemy4.x = 100
+       # enemy4.y = 100
+       # enemy4.speed = 4
+
+       # respawnTick = 0
+       # if respawnTick < RESPAWN:
+       #     respawnTick += 1
+       #     if respawnTick == RESPAWN:
+       #         enemy4.draw(win)
+       #         respawnTick = 0
     pygame.display.update()
 
 
@@ -376,18 +447,34 @@ def moveBullet(player_robo):
         player_robo.ok = True
 
 
+def roboTile(player_robo):
+    if player_robo.collide(WALLMASK) is not None:
+        player_robo.bounce()
+
+    if player_robo.inTile(SANDMASK):
+        player_robo.slowed()
+
+    if player_robo.inTile(ELECTRICMASK):
+        player_robo.stunned()
+
+    if player_robo.collide(WATERMASK):
+        player_robo.stop()
+
+
+
 map = TileMap()
 clock = pygame.time.Clock()
-player_robo = PlayerRobo(3, 3)
-enemy1 = EnemyRobo(3, 3, 800, 500, 200, 800, 200, 500)
-enemy2 = EnemyRobo(5, 20, 300, 800, 1, 1, 500, 800)
-enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0)
+player_robo = PlayerRobo(4, 3)
+enemy1= EnemyRobo(3, 5, 800, 500, PATH)
+enemy2 = EnemyRobo(5, 5, 400, 800, PATH)
+enemy3 = EnemyRobo(3, 5, 100, 100, PATH)
+enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        #Hinterher
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
 bullets = []
-enemies = [enemy1, enemy2, enemy3]
+enemies = [enemy1, enemy2, enemy3, enemy4]
 game_info = GameInfo()
 
 # main loop
@@ -415,7 +502,8 @@ while run:
         enemies.append(enemy1)
         enemies.append(enemy2)
         enemies.append(enemy3)
-        player_robo = PlayerRobo(3, 3)
+        enemies.append(enemy4)
+        player_robo = PlayerRobo(4, 3)
 
     while game_info.gameOver:
 
@@ -451,11 +539,18 @@ while run:
     if player_robo.tenacity < TENACITY:
         player_robo.tenacity += 1
 
-    movePlayer(player_robo)
+    for e in enemies:
+        if e.stun < STUNTICKS:
+            e.stun += 1
 
-    enemy1.moveEnemy2()
-    enemy2.moveEnemyRobot()
-    enemy3.moveEnemy3()
+        if e.tenacity < TENACITY:
+            e.tenacity += 1
+
+    movePlayer(player_robo)
+    enemy1.moveEnemy()
+    enemy2.moveEnemy()
+    enemy3.moveEnemy()
+    enemy4.moveHinterher()
 
     moveBullet(player_robo)
 
@@ -480,17 +575,23 @@ while run:
             game_info.score += 1
             game_info.hearts -= 1
 
-    if player_robo.collide(WALLMASK) is not None:
-        player_robo.bounce()
+    roboTile(player_robo)
 
-    if player_robo.inTile(SANDMASK):
-        player_robo.slowed()
+    for e in enemies:
+        if e.collide(WALLMASK) is not None:
+            e.bounce()
 
-    if player_robo.inTile(ELECTRICMASK):
-        player_robo.stunned()
+        if e.inTile(SANDMASK):
+            e.slowed()
 
-    if player_robo.collide(WATERMASK):
-        player_robo.stop()
+        if e.inTile(ELECTRICMASK):
+            e.stunned()
 
+        if e.collide(WATERMASK):
+            e.stop()
+    
+    
+    if len(enemies) < 4:
+        enemy4.moveHinterher()
 
 pygame.quit()
