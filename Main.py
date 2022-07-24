@@ -158,7 +158,7 @@ class Robot:  # Abstract class for player and ai robots
             self.move()
 
     def stop(self):
-        if self.speed > 0:
+        if self.speed >= 0:
             self.speed = -1
         elif self.speed < 0:
             self.speed = 1
@@ -278,7 +278,8 @@ class EnemyRobo(Robot):
 
     def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax, angle):
         super().__init__(maxSpeed, rotSpeed)
-        self.speed = maxSpeed
+        self.speed = 0
+        self.acceleration = 0.1
         self.x = x
         self.y = y
         self.xMin = xMin
@@ -286,6 +287,8 @@ class EnemyRobo(Robot):
         self.yMin = yMin
         self.yMax = yMax
         self.moveTick = 0
+        self.tenacity = TENACITY
+        self.stun = STUNTICKS
         self.angle = angle
         self.current_point = 0
         self.path = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 731), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
@@ -355,7 +358,9 @@ class EnemyRobo(Robot):
     def moveHinterher(self):
 
         self.calculate_angle()
-        super().move()
+        if self.stun == STUNTICKS:
+            self.moveForward()
+            
         
 
     def calculate_angle2(self):
@@ -397,7 +402,7 @@ class EnemyRobo(Robot):
 
         self.calculate_angle2()
         self.update_path_point()
-        super().move()
+        self.moveForward()
 
 
 
@@ -457,13 +462,28 @@ def moveBullet(player_robo):
         player_robo.ok = True
 
 
+def roboTile(player_robo):
+    if player_robo.collide(WALLMASK) is not None:
+        player_robo.bounce()
+
+    if player_robo.inTile(SANDMASK):
+        player_robo.slowed()
+
+    if player_robo.inTile(ELECTRICMASK):
+        player_robo.stunned()
+
+    if player_robo.collide(WATERMASK):
+        player_robo.stop()
+
+
+
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 3)
 enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
 enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
 enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
-enemy4 = EnemyRobo(2, 3, 100, 100, 0, 0, 0, 0, 0)
+enemy4 = EnemyRobo(4, 3, 100, 100, 0, 0, 0, 0, 0)
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -523,6 +543,13 @@ while run:
     if player_robo.tenacity < TENACITY:
         player_robo.tenacity += 1
 
+    for e in enemies:
+        if e.stun < STUNTICKS:
+            e.stun += 1
+
+        if e.tenacity < TENACITY:
+            e.tenacity += 1
+
     movePlayer(player_robo)
     enemy1.moveEnemy5()
     enemy2.moveEnemy4()
@@ -552,17 +579,22 @@ while run:
             game_info.score += 1
             game_info.hearts -= 1
 
-    if player_robo.collide(WALLMASK) is not None:
-        player_robo.bounce()
+    roboTile(player_robo)
 
-    if player_robo.inTile(SANDMASK):
-        player_robo.slowed()
+    for e in enemies:
+        if e.collide(WALLMASK) is not None:
+            e.bounce()
 
-    if player_robo.inTile(ELECTRICMASK):
-        player_robo.stunned()
+        if e.inTile(SANDMASK):
+            e.slowed()
 
-    if player_robo.collide(WATERMASK):
-        player_robo.stop()
+        if e.inTile(ELECTRICMASK):
+            e.stunned()
+
+        if e.collide(WATERMASK):
+            e.stop()
+    
+    
 
 
 pygame.quit()
