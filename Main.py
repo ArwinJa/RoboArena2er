@@ -497,7 +497,8 @@ while run:
         enemies.append(enemy1)
         enemies.append(enemy2)
         enemies.append(enemy3)
-        player_robo = PlayerRobo(3, 3)
+        enemies.append(enemy4)
+        player_robo = PlayerRobo(4, 3)
 
     while game_info.gameOver:
 
