@@ -557,6 +557,7 @@ while run:
             e.stop()
     
     
-
+    if len(enemies) < 4:
+        game_info.respawn()
 
 pygame.quit()
