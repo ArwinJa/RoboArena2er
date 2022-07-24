@@ -46,8 +46,7 @@ TILECOUNT = 40
 TILEPIX = 25
 STUNTICKS = 90
 TENACITY = 240
-MOVETICKS = 60
-MOVETICKS2 = 30
+RESPAWN = 90
 run = True
 PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
         (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
@@ -288,7 +287,6 @@ class EnemyRobo(Robot):
         self.moveTick = 0
         self.tenacity = TENACITY
         self.stun = STUNTICKS
-        #self.angle = angle
         self.current_point = 0
         self.path = path
         
@@ -383,6 +381,21 @@ def draw(win):
     for i in range(game_info.hearts):
         win.blit(HEART, (i * TILEPIX, 0))
     scoreblit(win, SCORE_FONT, f"score: {game_info.score}")
+    if len(enemies) < 4:
+        enemy4.draw(win)
+       # enemy4.moveHinterher()
+
+
+       # enemy4.x = 100
+       # enemy4.y = 100
+       # enemy4.speed = 4
+
+       # respawnTick = 0
+       # if respawnTick < RESPAWN:
+       #     respawnTick += 1
+       #     if respawnTick == RESPAWN:
+       #         enemy4.draw(win)
+       #         respawnTick = 0
     pygame.display.update()
 
 
@@ -558,6 +571,6 @@ while run:
     
     
     if len(enemies) < 4:
-        game_info.respawn()
+        enemy4.moveHinterher()
 
 pygame.quit()
