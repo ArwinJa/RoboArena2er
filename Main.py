@@ -63,6 +63,7 @@ class GameInfo:  # Game infromation like time Health etc
         self.gameStartTime = 0
         self.hearts = 3
         self.gameOver = False
+        self.pause = False
 
     def respawn(self):
         self.score = 0
@@ -405,6 +406,15 @@ def blitTextCenter(win, font, text):
                       win.get_height()/2 - render.get_height()/2))
 
 
+def stopGame():
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_p]:
+        game_info.pause =True
+
+
+    
+
+
 def movePlayer(player_robo):
 
     keys = pygame.key.get_pressed()
@@ -511,6 +521,17 @@ while run:
         if event.type == pygame.QUIT:
             pygame.quit()
             break
+
+    stopGame()
+    while game_info.pause == True:
+        blitTextCenter(Window, MAIN_FONT, "Game pause! Press any key ecxept p to continue")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.pause = False
 
     if player_robo.stun < STUNTICKS:
         player_robo.stun += 1
