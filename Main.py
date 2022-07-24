@@ -145,7 +145,7 @@ class Robot:  # Abstract class for player and ai robots
         self.speed = self.speed/1.6
         self.move()
 
-    def stunned (self):
+    def stunned(self):
         if self.tenacity == TENACITY:
             self.tenacity = 0
             self.stun = 0
@@ -153,7 +153,7 @@ class Robot:  # Abstract class for player and ai robots
             self.move()
 
     def stop(self):
-        if self.speed > 0:
+        if self.speed >= 0:
             self.speed = -1
         elif self.speed < 0:
             self.speed = 1
@@ -264,64 +264,35 @@ class PlayerRobo(Robot):
     IMG = ROBO
     STARTPOS = (500, 500)
 
-    
+
 class EnemyRobo(Robot):
 
     IMG = ENEMYROBO
     STARTPOS = (750, 250)
 
 
-    def __init__(self, maxSpeed, rotSpeed, x, y, xMin, xMax, yMin, yMax, angle):
+    def __init__(self, maxSpeed, rotSpeed, x, y, path=[]):
         super().__init__(maxSpeed, rotSpeed)
-        self.speed = maxSpeed
+        self.speed = 0
+        self.acceleration = 0.1
         self.x = x
         self.y = y
-        self.xMin = xMin
-        self.xMax = xMax
-        self.yMin = yMin
-        self.yMax = yMax
         self.moveTick = 0
-        self.angle = angle
+        self.tenacity = TENACITY
+        self.stun = STUNTICKS
+        #self.angle = angle
         self.current_point = 0
-        self.path = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 731), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
-        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
-
-
-
-    def moveEnemy2(self):
-        if self.y < self.yMin:
-            if self.angle <= 180:
-                self.angle += 1
-                self.rotate(left=True)
-            self.moveForward()
-        if self.y > self.yMax:
-            if self.angle <= 360:
-                self.angle += 1
-                self.rotate(left=True)
-            self.moveForward()
-        if self.angle == 360:
-            self.angle = 0
-        self.moveForward()
-
-
-    def moveEnemy3(self):
-        self.rotate(right=True)
-
-
-    def moveEnemy4(self):
-        if self.y < self.yMin:
-            if self.angle <= 180:
-                self.angle += 1
-                self.rotate(left=True)
-        if self.y > self.yMax:
-            if self.angle <= 360:
-                self.angle += 1
-                self.rotate(left=True)
-        if self.angle == 360:
-            self.angle = 0
-        self.moveForward()
-
+        self.path = path
         
+
+
+    def draw_points(self, win):
+        for point in self.path:
+            pygame.draw.circle(win, (255, 0, 0), point, 5)
+
+
+
+
     def calculate_angle(self):
         target_x = player_robo.x
         target_y = player_robo.y
@@ -349,7 +320,9 @@ class EnemyRobo(Robot):
     def moveHinterher(self):
 
         self.calculate_angle()
-        super().move()
+        if self.stun == STUNTICKS:
+            self.moveForward()
+            
         
 
     def calculate_angle2(self):
@@ -385,13 +358,19 @@ class EnemyRobo(Robot):
         if self.current_point == 22:
             self.current_point = 0
 
-    def moveEnemy5(self):
+    def moveEnemy(self):
         if self.current_point >= len(self.path):
             return
 
         self.calculate_angle2()
         self.update_path_point()
-        super().move()
+        self.moveForward()
+
+
+
+def scoreblit(win, font, text):
+    render = font.render(text, 1, (255, 255, 255))
+    win.blit(render, (0, TILEPIX - 5))
 
 
 def draw(win):
@@ -399,10 +378,11 @@ def draw(win):
     for b in bullets:
         b.drawB(win)
     player_robo.draw(win)
-    enemy1.draw(win)
-    enemy2.draw(win)
-    enemy3.draw(win)
-    enemy4.draw(win)
+    for e in enemies:
+        e.draw(win)
+    for i in range(game_info.hearts):
+        win.blit(HEART, (i * TILEPIX, 0))
+    scoreblit(win, SCORE_FONT, f"score: {game_info.score}")
     pygame.display.update()
 
 
@@ -410,7 +390,6 @@ def blitTextCenter(win, font, text):
     render = font.render(text, 1, (255, 255, 255))
     win.blit(render, (win.get_width()/2 - render.get_width()/2,
                       win.get_height()/2 - render.get_height()/2))
-
 
 
 def movePlayer(player_robo):
@@ -445,18 +424,34 @@ def moveBullet(player_robo):
         player_robo.ok = True
 
 
+def roboTile(player_robo):
+    if player_robo.collide(WALLMASK) is not None:
+        player_robo.bounce()
+
+    if player_robo.inTile(SANDMASK):
+        player_robo.slowed()
+
+    if player_robo.inTile(ELECTRICMASK):
+        player_robo.stunned()
+
+    if player_robo.collide(WATERMASK):
+        player_robo.stop()
+
+
+
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 3)
-enemy1= EnemyRobo(3, 5, 800, 500, 200, 800, 200, 800, 0)
-enemy2 = EnemyRobo(5, 5, 400, 800, 1, 1, 500, 800, 0)
-enemy3 = EnemyRobo(3, 5, 100, 100, 0, 0, 0, 0, 0)
-enemy4 = EnemyRobo(2, 3, 100, 100, 0, 0, 0, 0, 0)
+enemy1= EnemyRobo(3, 5, 800, 500, PATH)
+enemy2 = EnemyRobo(5, 5, 400, 800, PATH)
+enemy3 = EnemyRobo(3, 5, 100, 100, PATH)
+enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        #Hinterher
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
 bullets = []
+enemies = [enemy1, enemy2, enemy3, enemy4]
 game_info = GameInfo()
 
 # main loop
@@ -474,9 +469,30 @@ while run:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 break
-
             if event.type == pygame.KEYDOWN:
                 game_info.startGame()
+
+    if game_info.hearts == 0:
+        game_info.gameOver = True
+        game_info.respawn()
+        enemies.clear()
+        enemies.append(enemy1)
+        enemies.append(enemy2)
+        enemies.append(enemy3)
+        enemies.append(enemy4)
+        player_robo = PlayerRobo(4, 3)
+
+    while game_info.gameOver:
+
+        blitTextCenter(Window, MAIN_FONT,
+                       "GAME OVER!! Press any key to try again")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.gameOver = False
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -489,30 +505,59 @@ while run:
     if player_robo.tenacity < TENACITY:
         player_robo.tenacity += 1
 
+    for e in enemies:
+        if e.stun < STUNTICKS:
+            e.stun += 1
+
+        if e.tenacity < TENACITY:
+            e.tenacity += 1
+
     movePlayer(player_robo)
-    enemy1.moveEnemy5()
-    enemy2.moveEnemy4()
-    enemy3.moveEnemy3()
+    enemy1.moveEnemy()
+    enemy2.moveEnemy()
+    enemy3.moveEnemy()
     enemy4.moveHinterher()
 
     moveBullet(player_robo)
 
     for b in bullets:
+        for e in enemies:
+            enemyMask = pygame.mask.from_surface(e.img)
+            if b.collideB(enemyMask, e.x, e.y):
+                bullets.remove(b)
+                enemies.remove(e)
+                game_info.score += 1
+
         if b.collideB(WALLMASK) is not None:
             bullets.remove(b)
+
         else:
             b.moveB()
 
-    if player_robo.collide(WALLMASK) is not None:
-        player_robo.bounce()
+    for e in enemies:
+        enemyMask = pygame.mask.from_surface(e.img)
+        if player_robo.collide(enemyMask, e.x, e.y):
+            enemies.remove(e)
+            game_info.score += 1
+            game_info.hearts -= 1
 
-    if player_robo.inTile(SANDMASK):
-        player_robo.slowed()
+    roboTile(player_robo)
 
-    if player_robo.inTile(ELECTRICMASK):
-        player_robo.stunned()
+    for e in enemies:
+        if e.collide(WALLMASK) is not None:
+            e.bounce()
 
-    if player_robo.collide(WATERMASK):
-        player_robo.stop()
+        if e.inTile(SANDMASK):
+            e.slowed()
+
+        if e.inTile(ELECTRICMASK):
+            e.stunned()
+
+        if e.collide(WATERMASK):
+            e.stop()
+    
+    
+    if len(enemies) < 4:
+
 
 pygame.quit()
