@@ -51,7 +51,8 @@ PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732),
         (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
 PATH1 = [(180, 900), (70, 870), (30, 650), (200, 610), (230, 720), (310, 660),
          (450, 720), (840, 700), (840, 940), (190, 930)]
-PATH2 = [(28,300), (140, 220), (150, 80), (100, 30), (30, 100), (30, 200), (170, 210), (150, 470), (80, 450)]
+PATH2 = [(28, 300), (140, 220), (150, 80), (100, 30), (30, 100), (30, 200),
+         (170, 210), (150, 470), (80, 450)]
 PATH3 = [(900, 150), (800, 50), (550, 50), (530, 490), (560, 270), (940, 250)]
 
 
@@ -390,7 +391,7 @@ def blitTextCenter(win, font, text):
 def stopGame():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_p]:
-        game_info.pause =True
+        game_info.pause = True
 
 
 def movePlayer(player_robo):
@@ -450,12 +451,12 @@ def respawnEnemies():
         enemies.append(EnemyRobo(3, 5, 900, 300, PATH3))
     elif randnumber  == 4:
         enemies.append(EnemyRobo(4, 3, 100, 100, PATH))
-    
+
 
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 3)
-enemy1= EnemyRobo(3, 5, 180, 920, PATH1)
+enemy1 = EnemyRobo(3, 5, 180, 920, PATH1)
 enemy2 = EnemyRobo(5, 5, 25, 450, PATH2)
 enemy3 = EnemyRobo(3, 5, 900, 300, PATH3)
 enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        #  Hinterher
