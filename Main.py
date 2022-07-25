@@ -274,7 +274,7 @@ class TileMap():
 class PlayerRobo(Robot):
 
     IMG = ROBO
-    STARTPOS = (500, 500)
+    STARTPOS = (500, 460)
 
 
 class EnemyRobo(Robot):
