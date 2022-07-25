@@ -542,7 +542,7 @@ while run:
                 pygame.quit()
                 break
             if event.type == pygame.KEYDOWN:
-                game_info.gameOver = False
+                game_info.victorie = False
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
