@@ -64,6 +64,7 @@ class GameInfo:  # Game infromation like time Health etc
         self.gameStartTime = 0
         self.hearts = 3
         self.gameOver = False
+        self.victorie = False
         self.pause = False
 
     def respawn(self):
@@ -518,6 +519,39 @@ while run:
             break
 
     stopGame()
+
+
+    if game_info.score == 10:
+        game_info.victorie = True
+        game_info.respawn()
+        enemies.clear()
+        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
+        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
+        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
+        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
+        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
+        player_robo = PlayerRobo(4, 3)
+
+    while game_info.victorie:
+
+        blitTextCenter(Window, MAIN_FONT,
+                       "VICTORY!! Press any key to try again")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.gameOver = False
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            break
+
+    stopGame()
+
+
     while game_info.pause:
         blitTextCenter(Window, MAIN_FONT,
                        "Game pause! Press any key ecxept p to continue")
