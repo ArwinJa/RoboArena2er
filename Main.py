@@ -279,7 +279,7 @@ class EnemyRobo(Robot):
     IMG = ENEMYROBO
     STARTPOS = (750, 250)
 
-    def __init__(self, maxSpeed, rotSpeed, x, y, path=[]):
+    def __init__(self, maxSpeed, rotSpeed, x, y, angle, path=[]):
         super().__init__(maxSpeed, rotSpeed)
         self.speed = 0
         self.acceleration = 0.1
@@ -290,6 +290,7 @@ class EnemyRobo(Robot):
         self.stun = STUNTICKS
         self.current_point = 0
         self.path = path
+        self.angle = angle
 
     def calculate_angle(self):
         target_x = player_robo.x
@@ -440,31 +441,34 @@ def roboTile(player_robo):
 
 
 def respawnEnemies():
-    randnumber = random.randint(1, 4)
+    randnumber = random.randint(1, 5)
     if randnumber == 1:
-        enemies.append(EnemyRobo(3, 5, 180, 920, PATH1))
+        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
     elif randnumber == 2:
-        enemies.append(EnemyRobo(5, 5, 25, 450, PATH2))
+        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
     elif randnumber == 3:
 
-        enemies.append(EnemyRobo(3, 5, 900, 300, PATH3))
+        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
     elif randnumber == 4:
-        enemies.append(EnemyRobo(4, 3, 100, 100, PATH))
+        enemies.append(EnemyRobo(2, 3, player_robo.x+200, player_robo.y+200, 90, PATH))
+    elif randnumber == 5:
+        enemies.append(EnemyRobo(2, 3, 30, player_robo.x-50, player_robo.y-200, PATH))
 
 
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 3)
-enemy1 = EnemyRobo(3, 5, 180, 920, PATH1)
-enemy2 = EnemyRobo(5, 5, 25, 450, PATH2)
-enemy3 = EnemyRobo(3, 5, 900, 300, PATH3)
-enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        # Follow
+enemy1 = EnemyRobo(3, 5, 180, 920, 0, PATH1)
+enemy2 = EnemyRobo(5, 5, 25, 410, 0, PATH2)
+enemy3 = EnemyRobo(3, 5, 900, 300,0,  PATH3)
+enemy4 = EnemyRobo(2, 3, 920, 460, 90, PATH)  
+enemy5 = EnemyRobo(2, 3, 30, 460, 270, PATH)      # Follow
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
 bullets = []
-enemies = [enemy1, enemy2, enemy3, enemy4]
+enemies = [enemy1, enemy2, enemy3, enemy4, enemy5]
 game_info = GameInfo()
 
 # main loop
@@ -489,10 +493,11 @@ while run:
         game_info.gameOver = True
         game_info.respawn()
         enemies.clear()
-        enemies.append(EnemyRobo(3, 5, 180, 920, PATH1))
-        enemies.append(EnemyRobo(5, 5, 25, 450, PATH2))
-        enemies.append(EnemyRobo(3, 5, 900, 300, PATH3))
-        enemies.append(EnemyRobo(4, 3, 100, 100, PATH))
+        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
+        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
+        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
+        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
+        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
         player_robo = PlayerRobo(4, 3)
 
     while game_info.gameOver:
