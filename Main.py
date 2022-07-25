@@ -298,7 +298,7 @@ class EnemyRobo(Robot):
         y_diff = target_y - self.y
 
         if y_diff == 0:
-            desired_radian_angle = math.pi / 2  
+            desired_radian_angle = math.pi / 2
         else:
             desired_radian_angle = math.atan(x_diff / y_diff)
 
@@ -327,7 +327,7 @@ class EnemyRobo(Robot):
         y_diff = target_y - self.y
 
         if y_diff == 0:
-            desired_radian_angle = math.pi / 2  
+            desired_radian_angle = math.pi / 2
         else:
             desired_radian_angle = math.atan(x_diff / y_diff)
 
