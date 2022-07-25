@@ -1,8 +1,6 @@
-#from curses import window
-from shutil import move
-from turtle import circle, left, right
 import pygame
 import math
+import random
 import csv
 import time
 from tools import blitRotate
@@ -469,6 +467,21 @@ def roboTile(player_robo):
     if player_robo.collide(WATERMASK):
         player_robo.stop()
 
+def respawnEnemies():
+    randnumber = random.randint(1, 4)
+    if randnumber == 1:
+        enemies.append(EnemyRobo(3, 5, 180, 920, PATH1))
+    elif randnumber == 2:
+        enemies.append(EnemyRobo(5, 5, 25, 450, PATH2))
+    elif randnumber == 3:
+        
+        enemies.append(EnemyRobo(3, 5, 900, 300, PATH3))
+    elif randnumber  == 4:
+        enemies.append(EnemyRobo(4, 3, 100, 100, PATH))
+    
+
+
+
 
 
 map = TileMap()
@@ -508,10 +521,10 @@ while run:
         game_info.gameOver = True
         game_info.respawn()
         enemies.clear()
-        enemies.append(enemy1)
-        enemies.append(enemy2)
-        enemies.append(enemy3)
-        enemies.append(enemy4)
+        enemies.append(EnemyRobo(3, 5, 180, 920, PATH1))
+        enemies.append(EnemyRobo(5, 5, 25, 450, PATH2))
+        enemies.append(EnemyRobo(3, 5, 900, 300, PATH3))
+        enemies.append(EnemyRobo(4, 3, 100, 100, PATH))
         player_robo = PlayerRobo(4, 3)
 
     while game_info.gameOver:
@@ -555,11 +568,16 @@ while run:
         if e.tenacity < TENACITY:
             e.tenacity += 1
 
+    if len(enemies) < 4:
+        respawnEnemies()
+
     movePlayer(player_robo)
-    enemy1.moveEnemy()
-    enemy2.moveEnemy()
-    enemy3.moveEnemy()
-    enemy4.moveHinterher()
+    for e in enemies:
+        if e.path == PATH:
+            e.moveHinterher()
+        else:
+            e.moveEnemy()
+
 
     moveBullet(player_robo)
 
