@@ -48,7 +48,6 @@ STUNTICKS = 90
 TENACITY = 240
 RESPAWN = 90
 run = True
-respawnTick = 0
 PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
         (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
 PATH1 =[(180, 900), (70, 870), (30, 650), (200, 610), (230, 720), (310, 660), (450, 720), (840, 700), (840, 940),(190, 930)]
@@ -372,34 +371,12 @@ class EnemyRobo(Robot):
 
 
 
-class EnemySpawner:
-    def __init__(self):
-        self.enemy_group = enemies
-        self.spawn_timer = 90
-
-    def update(self):
-        self.enemy_group.update()
-        if self.spawn_timer == 0:
-            self.spawn_enemy()
-            self.spawn_timer == 90
-        else:
-            self.spawn_timer -= 1
-
-
-
-    def spawn_enemy(self):
-        new_enemy = EnemyRobo()
-        self.enemy_group.add(new_enemy)
-        
-
-
 def scoreblit(win, font, text):
     render = font.render(text, 1, (255, 255, 255))
     win.blit(render, (0, TILEPIX - 5))
 
 
 def draw(win):
-    global respawnTick
     map.drawtiles(win)
     for b in bullets:
         b.drawB(win)
@@ -409,13 +386,8 @@ def draw(win):
     for i in range(game_info.hearts):
         win.blit(HEART, (i * TILEPIX, 0))
     scoreblit(win, SCORE_FONT, f"score: {game_info.score}")
-    enemy_spawner.enemy_group.draw(win)
-
-
-
-
-   # if len(enemies) < 4:
-        #enemy4.draw(win)
+    if len(enemies) < 4:
+        enemy4.draw(win)
        # enemy4.moveHinterher()
 
 
@@ -424,11 +396,10 @@ def draw(win):
        # enemy4.speed = 4
 
        # respawnTick = 0
-  #      if respawnTick < RESPAWN:
-   #         respawnTick += 1
-    #        if respawnTick == RESPAWN:
-     #           enemy4.draw(win)
-      #         # enemies.append(enemy1)
+       # if respawnTick < RESPAWN:
+       #     respawnTick += 1
+       #     if respawnTick == RESPAWN:
+       #         enemy4.draw(win)
        #         respawnTick = 0
     pygame.display.update()
 
@@ -509,7 +480,6 @@ ELECTRICMASK = map.create_Mask(Electric, 4)
 bullets = []
 enemies = [enemy1, enemy2, enemy3, enemy4]
 game_info = GameInfo()
-enemy_spawner = EnemySpawner()
 
 # main loop
 while run:
@@ -624,10 +594,8 @@ while run:
         if e.collide(WATERMASK):
             e.stop()
     
-    enemy_spawner.update()
-
-
-  #  if len(enemies) < 4:
-   #     enemy4.moveHinterher()
+    
+    if len(enemies) < 4:
+        enemy4.moveHinterher()
 
 pygame.quit()
