@@ -4,7 +4,6 @@ import random
 import csv
 import time
 from tools import blitRotate
-from pygame.locals import*
 
 pygame.font.init()
 pygame.init()
@@ -46,15 +45,14 @@ STUNTICKS = 90
 TENACITY = 240
 RESPAWN = 90
 run = True
-PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732), (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
-        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123), (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
-PATH1 =[(180, 900), (70, 870), (30, 650), (200, 610), (230, 720), (310, 660), (450, 720), (840, 700), (840, 940),(190, 930)]
-PATH2 = [(28,300), (140, 220), (150,80), (100, 30), (30, 100), (30, 200), (170, 210), (150, 470), (80, 450)]
+PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732),
+        (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
+        (734, 399), (611, 357), (409, 343), (433, 257), (697, 258), (738, 123),
+        (581, 71), (303, 78), (275, 377), (176, 388), (178, 260)]
+PATH1 = [(180, 900), (70, 870), (30, 650), (200, 610), (230, 720), (310, 660),
+         (450, 720), (840, 700), (840, 940), (190, 930)]
+PATH2 = [(28,300), (140, 220), (150, 80), (100, 30), (30, 100), (30, 200), (170, 210), (150, 470), (80, 450)]
 PATH3 = [(900, 150), (800, 50), (550, 50), (530, 490), (560, 270), (940, 250)]
-
-
-
-
 
 
 class GameInfo:  # Game infromation like time Health etc
@@ -292,7 +290,6 @@ class EnemyRobo(Robot):
         self.stun = STUNTICKS
         self.current_point = 0
         self.path = path
-        
 
     def calculate_angle(self):
         target_x = player_robo.x
@@ -317,14 +314,11 @@ class EnemyRobo(Robot):
         else:
             self.angle += min(self.rotSpeed, abs(difference_in_angle))
 
-
     def moveHinterher(self):
 
         self.calculate_angle()
         if self.stun == STUNTICKS:
             self.moveForward()
-            
-        
 
     def calculate_angle2(self):
 
@@ -349,7 +343,6 @@ class EnemyRobo(Robot):
         else:
             self.angle += min(self.rotSpeed, abs(difference_in_angle))
 
-
     def update_path_point(self):
         target = self.path[self.current_point]
         rect = pygame.Rect(
@@ -361,9 +354,6 @@ class EnemyRobo(Robot):
             if self.current_point == len(self.path):
                 self.current_point = 0
 
-      
-        
-
     def moveEnemy(self):
         if self.current_point >= len(self.path):
             return
@@ -371,7 +361,6 @@ class EnemyRobo(Robot):
         self.calculate_angle2()
         self.update_path_point()
         self.moveForward()
-
 
 
 def scoreblit(win, font, text):
@@ -389,21 +378,6 @@ def draw(win):
     for i in range(game_info.hearts):
         win.blit(HEART, (i * TILEPIX, 0))
     scoreblit(win, SCORE_FONT, f"score: {game_info.score}")
-    #if len(enemies) < 4:
-    #    enemy4.draw(win)
-       # enemy4.moveHinterher()
-
-
-       # enemy4.x = 100
-       # enemy4.y = 100
-       # enemy4.speed = 4
-
-       # respawnTick = 0
-       # if respawnTick < RESPAWN:
-       #     respawnTick += 1
-       #     if respawnTick == RESPAWN:
-       #         enemy4.draw(win)
-       #         respawnTick = 0
     pygame.display.update()
 
 
@@ -417,9 +391,6 @@ def stopGame():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_p]:
         game_info.pause =True
-
-
-    
 
 
 def movePlayer(player_robo):
@@ -467,6 +438,7 @@ def roboTile(player_robo):
     if player_robo.collide(WATERMASK):
         player_robo.stop()
 
+
 def respawnEnemies():
     randnumber = random.randint(1, 4)
     if randnumber == 1:
@@ -480,17 +452,13 @@ def respawnEnemies():
         enemies.append(EnemyRobo(4, 3, 100, 100, PATH))
     
 
-
-
-
-
 map = TileMap()
 clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 3)
 enemy1= EnemyRobo(3, 5, 180, 920, PATH1)
 enemy2 = EnemyRobo(5, 5, 25, 450, PATH2)
 enemy3 = EnemyRobo(3, 5, 900, 300, PATH3)
-enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        #Hinterher
+enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        #  Hinterher
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -591,7 +559,6 @@ while run:
 
         if b.collideB(WALLMASK) is not None:
             bullets.remove(b)
-
         else:
             b.moveB()
 
@@ -616,9 +583,6 @@ while run:
 
         if e.collide(WATERMASK):
             e.stop()
-    
-    
-    #if len(enemies) < 4:
-    #    enemy4.moveHinterher()
+
 
 pygame.quit()
