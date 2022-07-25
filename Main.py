@@ -279,7 +279,6 @@ class EnemyRobo(Robot):
     IMG = ENEMYROBO
     STARTPOS = (750, 250)
 
-
     def __init__(self, maxSpeed, rotSpeed, x, y, path=[]):
         super().__init__(maxSpeed, rotSpeed)
         self.speed = 0
@@ -299,7 +298,7 @@ class EnemyRobo(Robot):
         y_diff = target_y - self.y
 
         if y_diff == 0:
-            desired_radian_angle = math.pi / 2  ####
+            desired_radian_angle = math.pi / 2  
         else:
             desired_radian_angle = math.atan(x_diff / y_diff)
 
@@ -328,7 +327,7 @@ class EnemyRobo(Robot):
         y_diff = target_y - self.y
 
         if y_diff == 0:
-            desired_radian_angle = math.pi / 2  ####
+            desired_radian_angle = math.pi / 2  
         else:
             desired_radian_angle = math.atan(x_diff / y_diff)
 
@@ -447,9 +446,9 @@ def respawnEnemies():
     elif randnumber == 2:
         enemies.append(EnemyRobo(5, 5, 25, 450, PATH2))
     elif randnumber == 3:
-        
+
         enemies.append(EnemyRobo(3, 5, 900, 300, PATH3))
-    elif randnumber  == 4:
+    elif randnumber == 4:
         enemies.append(EnemyRobo(4, 3, 100, 100, PATH))
 
 
@@ -459,7 +458,7 @@ player_robo = PlayerRobo(4, 3)
 enemy1 = EnemyRobo(3, 5, 180, 920, PATH1)
 enemy2 = EnemyRobo(5, 5, 25, 450, PATH2)
 enemy3 = EnemyRobo(3, 5, 900, 300, PATH3)
-enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        #  Hinterher
+enemy4 = EnemyRobo(4, 3, 100, 100, PATH)        # Follow
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
@@ -514,8 +513,9 @@ while run:
             break
 
     stopGame()
-    while game_info.pause == True:
-        blitTextCenter(Window, MAIN_FONT, "Game pause! Press any key ecxept p to continue")
+    while game_info.pause:
+        blitTextCenter(Window, MAIN_FONT,
+                       "Game pause! Press any key ecxept p to continue")
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -546,7 +546,6 @@ while run:
             e.moveHinterher()
         else:
             e.moveEnemy()
-
 
     moveBullet(player_robo)
 
