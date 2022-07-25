@@ -391,8 +391,8 @@ def draw(win):
     for i in range(game_info.hearts):
         win.blit(HEART, (i * TILEPIX, 0))
     scoreblit(win, SCORE_FONT, f"score: {game_info.score}")
-    if len(enemies) < 4:
-        enemy4.draw(win)
+    #if len(enemies) < 4:
+    #    enemy4.draw(win)
        # enemy4.moveHinterher()
 
 
@@ -600,7 +600,7 @@ while run:
             e.stop()
     
     
-    if len(enemies) < 4:
-        enemy4.moveHinterher()
+    #if len(enemies) < 4:
+    #    enemy4.moveHinterher()
 
 pygame.quit()
