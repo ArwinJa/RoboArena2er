@@ -75,6 +75,14 @@ class GameInfo:  # Game infromation like time Health etc
         self.started = False
         self.gameStartTime = 0
         self.hearts = 3
+        enemies.clear()
+        bullets.clear()
+        enemybullets.clear()
+        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
+        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
+        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
+        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
+        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
 
     def startGame(self):
         self.started = True
@@ -379,11 +387,15 @@ class EnemyRobo(Robot):
 
 
 def scoreblit(win, font, text):
+
+    # shows score at the to left
     render = font.render(text, 1, (255, 255, 255))
     win.blit(render, (0, TILEPIX - 5))
 
 
 def draw(win):
+
+    #draws everything on the window
     map.drawtiles(win)
     for b in bullets:
         b.drawB(win)
@@ -399,6 +411,8 @@ def draw(win):
 
 
 def blitTextCenter(win, font, text):
+
+    # displays a text at the center of the window
     render = font.render(text, 1, (255, 255, 255))
     win.blit(render, (win.get_width()/2 - render.get_width()/2,
                       win.get_height()/2 - render.get_height()/2))
@@ -418,68 +432,14 @@ def startGame():
                 game_info.startGame()
 
 
-def stopGame():
+def stopGame(): # checks if p was pressed for pause
+
     keys = pygame.key.get_pressed()
     if keys[pygame.K_p]:
         game_info.pause = True
 
 
-def looseGame():
-    if game_info.hearts == 0:
-        game_info.gameOver = True
-        game_info.respawn()
-        enemies.clear()
-        bullets.clear()
-        enemybullets.clear()
-        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
-        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
-        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
-        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
-        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
-        player_robo = PlayerRobo(4, 3)
-
-    while game_info.gameOver:
-
-        blitTextCenter(Window, MAIN_FONT,
-                       "GAME OVER!! Press any key to try again")
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                break
-            if event.type == pygame.KEYDOWN:
-                game_info.gameOver = False
-
-
-def winGame():
-
-    if game_info.score == 10:
-        game_info.victorie = True
-        game_info.respawn()
-        enemies.clear()
-        bullets.clear()
-        enemybullets.clear()
-        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
-        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
-        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
-        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
-        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
-        player_robo = PlayerRobo(4, 3)
-
-    while game_info.victorie:
-
-        blitTextCenter(Window, MAIN_FONT,
-                       "VICTORY!! Press any key to play again")
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                break
-            if event.type == pygame.KEYDOWN:
-                game_info.victorie = False
-
-
-def paused():
+def paused():   # self explaining
 
     while game_info.pause:
         blitTextCenter(Window, MAIN_FONT,
@@ -493,7 +453,7 @@ def paused():
                 game_info.pause = False
 
 
-def counterVar():
+def counterVar(): #counter variable for cooldowns
     if player_robo.stun < STUNTICKS:
         player_robo.stun += 1
 
@@ -509,6 +469,8 @@ def counterVar():
 
 
 def enemyBulletsActions():
+
+    # Bullets shot by enemies interactions
     for eb in enemybullets:
         eBMask = pygame.mask.from_surface(eb.img)
         if player_robo.collide(eBMask, eb.x, eb.y):
@@ -521,8 +483,9 @@ def enemyBulletsActions():
             eb.moveB()
 
 
-def collisionEnemy():
+def collisionEnemy(): 
 
+    # Check whether player collide with an enemie
     for e in enemies:
         enemyMask = pygame.mask.from_surface(e.img)
         if player_robo.collide(enemyMask, e.x, e.y):
@@ -531,7 +494,7 @@ def collisionEnemy():
             game_info.hearts -= 1
 
 
-def bulletAction():
+def bulletAction(): # Bullets shot by player interactions
 
     for b in bullets:
         for e in enemies:
@@ -547,7 +510,7 @@ def bulletAction():
             b.moveB()
 
 
-def enemyTiles():
+def enemyTiles():   # Interaction between enemies and tiles
     for e in enemies:
         if e.collide(WALLMASK) is not None:
             e.bounce()
@@ -560,6 +523,43 @@ def enemyTiles():
 
         if e.collide(WATERMASK):
             e.stop()
+
+
+def gameWon():
+
+    # Win loop
+    while game_info.victorie:
+
+        blitTextCenter(Window, MAIN_FONT,
+                       "VICTORY!! Press any key to play again")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.victorie = False
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            break
+
+
+def gameLost():
+
+    # Lose loop
+    while game_info.gameOver:
+
+        blitTextCenter(Window, MAIN_FONT,
+                       "GAME OVER!! Press any key to try again")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.gameOver = False
 
 
 def movePlayer(player_robo):
@@ -582,8 +582,9 @@ def movePlayer(player_robo):
         player_robo.slowDown()
 
 
-def moveBullet(player_robo):
+def moveBullet(player_robo):    
 
+    # prevents player from shooting multiple bullets at a time
     key = pygame.key.get_pressed()
 
     if key[pygame.K_SPACE]:
@@ -594,7 +595,7 @@ def moveBullet(player_robo):
         player_robo.ok = True
 
 
-def roboTile(player_robo):
+def roboTile(player_robo):  # Interaction between player and tiles
     if player_robo.collide(WALLMASK) is not None:
         player_robo.bounce()
 
@@ -608,7 +609,7 @@ def roboTile(player_robo):
         player_robo.stop()
 
 
-def respawnEnemies():
+def respawnEnemies():   # If there are less than 4 enemies new will spawn
     randnumber = random.randint(1, 5)
     if randnumber == 1:
         enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
@@ -650,16 +651,23 @@ while run:
 
     startGame()
 
-    looseGame()
+    # Loosing the game
+    if game_info.hearts == 0:
+        game_info.gameOver = True
+        game_info.respawn()
+        player_robo = PlayerRobo(4, 3)
+
+    gameLost()
 
     stopGame()
 
-    winGame()
+    # winning the game resets
+    if game_info.score == 10:
+        game_info.victorie = True
+        game_info.respawn()
+        player_robo = PlayerRobo(4, 3)
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            break
+    gameWon()
 
     paused()
 
