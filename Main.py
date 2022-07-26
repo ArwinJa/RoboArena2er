@@ -44,6 +44,8 @@ TILEPIX = 25
 STUNTICKS = 90
 TENACITY = 240
 RESPAWN = 90
+COOLDOWN = 240
+
 run = True
 PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732),
         (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
@@ -97,6 +99,7 @@ class Robot:  # Abstract class for player and ai robots
         self.stun = STUNTICKS
         self.tenacity = TENACITY
         self.ok = True
+        self.cooldown = 0
 
     # if either left or right is true will adjust the angle
     def rotate(self, left=False, right=False):
@@ -171,8 +174,8 @@ class Robot:  # Abstract class for player and ai robots
 
 
 class bullet:
-    def __init__(self, robot):
-        self.direction = robot.angle
+    def __init__(self, robot, angle):
+        self.direction = angle
         self.x = robot.x + 25
         self.y = robot.y + 25
         self.speed = robot.maxSpeed + 1
@@ -364,6 +367,16 @@ class EnemyRobo(Robot):
         self.update_path_point()
         self.moveForward()
 
+    def enemyshoot(self):
+        if self.cooldown == COOLDOWN:
+            enemybullets.append(bullet(self, self.angle))
+            enemybullets.append(bullet(self, self.angle + 90))
+            enemybullets.append(bullet(self, self.angle + 270))
+            self.cooldown = 0
+        else:
+            self.cooldown += 1
+
+
 
 def scoreblit(win, font, text):
     render = font.render(text, 1, (255, 255, 255))
@@ -379,6 +392,8 @@ def draw(win):
         e.draw(win)
     for i in range(game_info.hearts):
         win.blit(HEART, (i * TILEPIX, 0))
+    for eb in enemybullets:
+        eb.drawB(win)
     scoreblit(win, SCORE_FONT, f"score: {game_info.score}")
     pygame.display.update()
 
@@ -421,7 +436,7 @@ def moveBullet(player_robo):
 
     if key[pygame.K_SPACE]:
         if len(bullets) <= 4 and player_robo.ok:
-            bullets.append(bullet(player_robo))
+            bullets.append(bullet(player_robo, player_robo.angle))
         player_robo.ok = False
     if not key[pygame.K_SPACE]:
         player_robo.ok = True
@@ -469,6 +484,7 @@ SANDMASK = map.create_Mask(Sand, 5)
 WATERMASK = map.create_Mask(Water, 3)
 ELECTRICMASK = map.create_Mask(Electric, 4)
 bullets = []
+enemybullets = []
 enemies = [enemy1, enemy2, enemy3, enemy4, enemy5]
 game_info = GameInfo()
 
@@ -581,12 +597,23 @@ while run:
 
     movePlayer(player_robo)
     for e in enemies:
+        e.enemyshoot()
         if e.path == PATH:
             e.moveHinterher()
         else:
             e.moveEnemy()
 
     moveBullet(player_robo)
+    for eb in enemybullets:
+        eBMask = pygame.mask.from_surface(eb.img)
+        if player_robo.collide(eBMask, eb.x, eb.y):
+            enemybullets.remove(eb)
+            game_info.hearts -= 1
+
+        if eb.collideB(WALLMASK) is not None:
+            enemybullets.remove(eb)
+        else:
+            eb.moveB()
 
     for b in bullets:
         for e in enemies:
