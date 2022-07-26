@@ -377,7 +377,6 @@ class EnemyRobo(Robot):
             self.cooldown += 1
 
 
-
 def scoreblit(win, font, text):
     render = font.render(text, 1, (255, 255, 255))
     win.blit(render, (0, TILEPIX - 5))
@@ -466,9 +465,11 @@ def respawnEnemies():
 
         enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
     elif randnumber == 4:
-        enemies.append(EnemyRobo(2, 3, player_robo.x+200, player_robo.y+200, 90, PATH))
+        enemies.append(EnemyRobo(2, 3, player_robo.x+200,
+                                 player_robo.y+200, 90, PATH))
     elif randnumber == 5:
-        enemies.append(EnemyRobo(2, 3, 30, player_robo.x-50, player_robo.y-200, PATH))
+        enemies.append(EnemyRobo(2, 3, 30, player_robo.x-50,
+                                 player_robo.y-200, PATH))
 
 
 map = TileMap()
@@ -476,8 +477,8 @@ clock = pygame.time.Clock()
 player_robo = PlayerRobo(4, 3)
 enemy1 = EnemyRobo(3, 5, 180, 920, 0, PATH1)
 enemy2 = EnemyRobo(5, 5, 25, 410, 0, PATH2)
-enemy3 = EnemyRobo(3, 5, 900, 300,0,  PATH3)
-enemy4 = EnemyRobo(2, 3, 920, 460, 90, PATH)  
+enemy3 = EnemyRobo(3, 5, 900, 300, 0,  PATH3)
+enemy4 = EnemyRobo(2, 3, 920, 460, 90, PATH)
 enemy5 = EnemyRobo(2, 3, 30, 460, 270, PATH)      # Follow
 WALLMASK = map.create_Mask(Wall, 1)
 SANDMASK = map.create_Mask(Sand, 5)
@@ -536,7 +537,6 @@ while run:
 
     stopGame()
 
-
     if game_info.score == 10:
         game_info.victorie = True
         game_info.respawn()
@@ -566,7 +566,6 @@ while run:
             break
 
     stopGame()
-
 
     while game_info.pause:
         blitTextCenter(Window, MAIN_FONT,
