@@ -519,9 +519,9 @@ while run:
         player_robo = PlayerRobo(4, 3)
 
     while game_info.gameOver:
-
+        
         blitTextCenter(Window, MAIN_FONT,
-                       "GAME OVER!! Press any key to try again")
+                       "GAME OVER!! \nPress any key to try again")
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
