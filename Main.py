@@ -395,7 +395,7 @@ def scoreblit(win, font, text):
 
 def draw(win):
 
-    #draws everything on the window
+    # draws everything on the window
     map.drawtiles(win)
     for b in bullets:
         b.drawB(win)
@@ -432,7 +432,7 @@ def startGame():
                 game_info.startGame()
 
 
-def stopGame(): # checks if p was pressed for pause
+def stopGame():  # checks if p was pressed for pause
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_p]:
@@ -453,7 +453,7 @@ def paused():   # self explaining
                 game_info.pause = False
 
 
-def counterVar(): #counter variable for cooldowns
+def counterVar():  # counter variable for cooldowns
     if player_robo.stun < STUNTICKS:
         player_robo.stun += 1
 
@@ -483,7 +483,7 @@ def enemyBulletsActions():
             eb.moveB()
 
 
-def collisionEnemy(): 
+def collisionEnemy():
 
     # Check whether player collide with an enemie
     for e in enemies:
@@ -494,7 +494,7 @@ def collisionEnemy():
             game_info.hearts -= 1
 
 
-def bulletAction(): # Bullets shot by player interactions
+def bulletAction():  # Bullets shot by player interactions
 
     for b in bullets:
         for e in enemies:
@@ -582,7 +582,7 @@ def movePlayer(player_robo):
         player_robo.slowDown()
 
 
-def moveBullet(player_robo):    
+def moveBullet(player_robo):
 
     # prevents player from shooting multiple bullets at a time
     key = pygame.key.get_pressed()
@@ -685,7 +685,7 @@ while run:
             e.moveEnemy()
 
     moveBullet(player_robo)
-    
+
     enemyBulletsActions()
 
     bulletAction()
