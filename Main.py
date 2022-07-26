@@ -46,6 +46,7 @@ TENACITY = 240
 RESPAWN = 90
 COOLDOWN = 240
 
+
 run = True
 PATH = [(175, 119), (110, 70), (56, 133), (70, 481), (318, 732),
         (404, 680), (418, 521), (507, 475), (600, 551), (613, 715), (736, 713),
@@ -403,10 +404,162 @@ def blitTextCenter(win, font, text):
                       win.get_height()/2 - render.get_height()/2))
 
 
+def startGame():
+    # Pre Game start loop
+    while not game_info.started:
+        blitTextCenter(Window, MAIN_FONT, "Press any key to start the game")
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.startGame()
+
+
 def stopGame():
     keys = pygame.key.get_pressed()
     if keys[pygame.K_p]:
         game_info.pause = True
+
+
+def looseGame():
+    if game_info.hearts == 0:
+        game_info.gameOver = True
+        game_info.respawn()
+        enemies.clear()
+        bullets.clear()
+        enemybullets.clear()
+        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
+        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
+        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
+        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
+        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
+        player_robo = PlayerRobo(4, 3)
+
+    while game_info.gameOver:
+
+        blitTextCenter(Window, MAIN_FONT,
+                       "GAME OVER!! Press any key to try again")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.gameOver = False
+
+
+def winGame():
+
+    if game_info.score == 10:
+        game_info.victorie = True
+        game_info.respawn()
+        enemies.clear()
+        bullets.clear()
+        enemybullets.clear()
+        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
+        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
+        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
+        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
+        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
+        player_robo = PlayerRobo(4, 3)
+
+    while game_info.victorie:
+
+        blitTextCenter(Window, MAIN_FONT,
+                       "VICTORY!! Press any key to play again")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.victorie = False
+
+
+def paused():
+
+    while game_info.pause:
+        blitTextCenter(Window, MAIN_FONT,
+                       "Game pause! Press any key ecxept p to continue")
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                break
+            if event.type == pygame.KEYDOWN:
+                game_info.pause = False
+
+
+def counterVar():
+    if player_robo.stun < STUNTICKS:
+        player_robo.stun += 1
+
+    if player_robo.tenacity < TENACITY:
+        player_robo.tenacity += 1
+
+    for e in enemies:
+        if e.stun < STUNTICKS:
+            e.stun += 1
+
+        if e.tenacity < TENACITY:
+            e.tenacity += 1
+
+
+def enemyBulletsActions():
+    for eb in enemybullets:
+        eBMask = pygame.mask.from_surface(eb.img)
+        if player_robo.collide(eBMask, eb.x, eb.y):
+            enemybullets.remove(eb)
+            game_info.hearts -= 1
+
+        if eb.collideB(WALLMASK) is not None:
+            enemybullets.remove(eb)
+        else:
+            eb.moveB()
+
+
+def collisionEnemy():
+
+    for e in enemies:
+        enemyMask = pygame.mask.from_surface(e.img)
+        if player_robo.collide(enemyMask, e.x, e.y):
+            enemies.remove(e)
+            game_info.score += 1
+            game_info.hearts -= 1
+
+
+def bulletAction():
+
+    for b in bullets:
+        for e in enemies:
+            enemyMask = pygame.mask.from_surface(e.img)
+            if b.collideB(enemyMask, e.x, e.y):
+                bullets.remove(b)
+                enemies.remove(e)
+                game_info.score += 1
+
+        if b.collideB(WALLMASK) is not None:
+            bullets.remove(b)
+        else:
+            b.moveB()
+
+
+def enemyTiles():
+    for e in enemies:
+        if e.collide(WALLMASK) is not None:
+            e.bounce()
+
+        if e.inTile(SANDMASK):
+            e.slowed()
+
+        if e.inTile(ELECTRICMASK):
+            e.stunned()
+
+        if e.collide(WATERMASK):
+            e.stop()
 
 
 def movePlayer(player_robo):
@@ -495,101 +648,22 @@ while run:
 
     draw(Window)
 
-    # Pre Game start loop
-    while not game_info.started:
-        blitTextCenter(Window, MAIN_FONT, "Press any key to start the game")
-        pygame.display.update()
+    startGame()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                break
-            if event.type == pygame.KEYDOWN:
-                game_info.startGame()
+    looseGame()
 
-    if game_info.hearts == 0:
-        game_info.gameOver = True
-        game_info.respawn()
-        enemies.clear()
-        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
-        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
-        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
-        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
-        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
-        player_robo = PlayerRobo(4, 3)
+    stopGame()
 
-    while game_info.gameOver:
-
-        blitTextCenter(Window, MAIN_FONT,
-                       "GAME OVER!! Press any key to try again")
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                break
-            if event.type == pygame.KEYDOWN:
-                game_info.gameOver = False
+    winGame()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             break
 
-    stopGame()
+    paused()
 
-    if game_info.score == 10:
-        game_info.victorie = True
-        game_info.respawn()
-        enemies.clear()
-        enemies.append(EnemyRobo(3, 5, 180, 920, 0, PATH1))
-        enemies.append(EnemyRobo(5, 5, 25, 450, 0, PATH2))
-        enemies.append(EnemyRobo(3, 5, 900, 300, 0, PATH3))
-        enemies.append(EnemyRobo(2, 3, 920, 460, 90, PATH))
-        enemies.append(EnemyRobo(2, 3, 30, 460, 270, PATH))
-        player_robo = PlayerRobo(4, 3)
-
-    while game_info.victorie:
-
-        blitTextCenter(Window, MAIN_FONT,
-                       "VICTORY!! Press any key to try again")
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                break
-            if event.type == pygame.KEYDOWN:
-                game_info.victorie = False
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            break
-
-    stopGame()
-
-    while game_info.pause:
-        blitTextCenter(Window, MAIN_FONT,
-                       "Game pause! Press any key ecxept p to continue")
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                break
-            if event.type == pygame.KEYDOWN:
-                game_info.pause = False
-
-    if player_robo.stun < STUNTICKS:
-        player_robo.stun += 1
-
-    if player_robo.tenacity < TENACITY:
-        player_robo.tenacity += 1
-
-    for e in enemies:
-        if e.stun < STUNTICKS:
-            e.stun += 1
-
-        if e.tenacity < TENACITY:
-            e.tenacity += 1
+    counterVar()
 
     if len(enemies) < 4:
         respawnEnemies()
@@ -603,51 +677,16 @@ while run:
             e.moveEnemy()
 
     moveBullet(player_robo)
-    for eb in enemybullets:
-        eBMask = pygame.mask.from_surface(eb.img)
-        if player_robo.collide(eBMask, eb.x, eb.y):
-            enemybullets.remove(eb)
-            game_info.hearts -= 1
+    
+    enemyBulletsActions()
 
-        if eb.collideB(WALLMASK) is not None:
-            enemybullets.remove(eb)
-        else:
-            eb.moveB()
+    bulletAction()
 
-    for b in bullets:
-        for e in enemies:
-            enemyMask = pygame.mask.from_surface(e.img)
-            if b.collideB(enemyMask, e.x, e.y):
-                bullets.remove(b)
-                enemies.remove(e)
-                game_info.score += 1
-
-        if b.collideB(WALLMASK) is not None:
-            bullets.remove(b)
-        else:
-            b.moveB()
-
-    for e in enemies:
-        enemyMask = pygame.mask.from_surface(e.img)
-        if player_robo.collide(enemyMask, e.x, e.y):
-            enemies.remove(e)
-            game_info.score += 1
-            game_info.hearts -= 1
+    collisionEnemy()
 
     roboTile(player_robo)
 
-    for e in enemies:
-        if e.collide(WALLMASK) is not None:
-            e.bounce()
-
-        if e.inTile(SANDMASK):
-            e.slowed()
-
-        if e.inTile(ELECTRICMASK):
-            e.stunned()
-
-        if e.collide(WATERMASK):
-            e.stop()
+    enemyTiles()
 
 
 pygame.quit()
