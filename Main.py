@@ -660,6 +660,10 @@ while run:
         if event.type == pygame.QUIT:
             pygame.quit()
             break
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                break
 
     paused()
 
