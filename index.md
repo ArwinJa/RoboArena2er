@@ -72,7 +72,7 @@ First days of coding:
 
 Coding the movement of the player and first background
 
-![Alt Text](https://github.com/ArwinJa/RoboArena2er/blob/pages/img/Example.gif)
+![Alt Text](img/Example.gif)
 
 
 
