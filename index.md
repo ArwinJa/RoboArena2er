@@ -49,6 +49,11 @@ Every time the player robot gets hit by a bullet from an enemy or collides with 
 If he gets hit 3 times no heart is left and the game over screen shows up.
 To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
+Enemies:
+
+There are two tipes of enemies. 
+At the game start there are 3 enemies who are following a specific path and are respawned at their starting position.
+The other two are following the player robot and are respawned near the player robot.
 
 
 
