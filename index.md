@@ -60,6 +60,7 @@ UML:
 First days of coding:
 
 Coding the movement of the player and first background
+
 ![image](https://user-images.githubusercontent.com/104694302/181361439-bb0f0df2-9b2e-4b81-a32b-9daf0a8810af.png)
 
 
