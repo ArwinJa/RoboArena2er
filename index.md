@@ -72,7 +72,7 @@ First days of coding:
 
 Coding the movement of the player and first background
 
-![Alt Text](img/Example.gif)
+![image](img/Example.gif)
 
 
 
