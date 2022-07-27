@@ -19,35 +19,26 @@ Arena:
 
 The map consist of different tiles
 
-The grass-tile:
+The grass-tile: Robots can walk normally on them.
 
 ![image](https://user-images.githubusercontent.com/104694302/181357272-4d559169-b065-48c9-8019-1fb0c3b1d8c7.png)
 
-The robots can walk normally on them.
-
-The sand-tiles
+The sand-tiles: Robots walk slowly on them.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358528-0d36e6ef-b4ab-4dbb-b38c-52ba2213fdc6.png)
 
-The robots walk slowly on them.
-
-The wall-tiles
+The wall-tiles: Robots can't walk through them and bounce back.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358659-b9be476a-5fd3-4262-aecc-08792f293732.png)
 
-The robots can't walk through them and bounce back.
-
-The water-tiles
+The water-tiles: Robots can't walk through them.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358839-0f097f3a-4e8c-4d48-aff2-922a280cb514.png)
 
-The robots can't walk through them.
-
-The electric-tiles
+The electric-tiles: If the robot walked completly on that tile they can't walk for a bit.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358992-55d0069f-ef37-4ae2-a0bd-df8e497f9a6c.png)
 
-If the robot walked completly on them they can't walk for a bit.
 
 
 
