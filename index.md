@@ -39,11 +39,19 @@ The electric-tiles: If the robot walked completly on that tile they can't walk f
 
 ![image](https://user-images.githubusercontent.com/104694302/181358992-55d0069f-ef37-4ae2-a0bd-df8e497f9a6c.png)
 
+Victory:
+
+To win this game the player need do shoot 10 enemy robots down. With each hit the score increases by one. If the score is eaqual to 10 the wory victoy will show up on the screen. To return to the start screen the player needs to press any key and play again he needs to pless any key again.
+
+Game over:
+
+Every time the player robot gets hit by a bullet from an enemy or collides with an enemy the player looses a heart.
+If he gets hit 3 times no heart is left and the game over screen shows up.
+To return to the start screen the player needs to press any key and play again he needs to pless any key again.
 
 
 
 
-
-![image](https://user-images.githubusercontent.com/104150733/181349759-e61e8e60-6615-4636-b7e5-3be231d991dc.png)
+UML:
 
 ![image](https://user-images.githubusercontent.com/104694302/181350196-0b1bccd4-09c0-47cd-afd4-ab5bd315572d.png)
