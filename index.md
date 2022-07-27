@@ -14,6 +14,12 @@ The player robot also 3 heart wich represent the lives to robot has.
 On the map are several enemies wich can be shoot with the bullet. The enemies are can shoot bullets themself wich take a life from the player robot if it hits him.
 The enemies are dying after one hit from the player and right after another one spawns again.
 
+Arena:
+The map consist of different tiles
+The grass-tile:
+![image](https://user-images.githubusercontent.com/104694302/181357272-4d559169-b065-48c9-8019-1fb0c3b1d8c7.png)
+
+
 
 
 
