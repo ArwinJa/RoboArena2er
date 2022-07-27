@@ -51,6 +51,8 @@ Victory:
 
 To win this game the player need do shoot 10 enemy robots down. With each hit the score increases by one. If the score is eaqual to 10 the word victoy will show up on the screen. To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
+![image](img/victory.gif)
+
 Game over:
 
 Every time the player robot gets hit by a bullet from an enemy or collides with an enemy the player looses a heart.
@@ -74,5 +76,9 @@ Coding the movement of the player and first background
 
 ![image](img/Example.gif)
 
+With more time:
+
+One suggestion we got was to implement more maps for the game.
+We also wanted to do that for a better game experience but we finished the game how it is now on Tuesday. If we were free the last to days we might be able to integrate other maps on time. Not only the coding would have taken too much time but also the enemies. The enemies are following a path containing the coordinates of the points the enemies are following. The points are found out per hand. We tried to create a function so that you only need to click with the mouse on the field where you want the enemy to walk around. That didn't work well because the enemy will still get stuck on the water or wall.
 
 
