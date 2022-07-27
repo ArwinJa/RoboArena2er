@@ -18,7 +18,8 @@ Arena:
 The map consist of different tiles
 The grass-tile:
 ![image](https://user-images.githubusercontent.com/104694302/181357272-4d559169-b065-48c9-8019-1fb0c3b1d8c7.png)
-![image](img/Grass-Tiles.png) (width: 400px)
+![image](img/Grass-Tiles.png) 
+img[alt=image] { width: 200px; }
 
 
 
