@@ -39,6 +39,14 @@ The electric-tiles: If the robot walked completly on that tile they can't walk f
 
 ![image](https://user-images.githubusercontent.com/104694302/181358992-55d0069f-ef37-4ae2-a0bd-df8e497f9a6c.png)
 
+Enemies:
+
+There are two tipes of enemies. 
+At the game start there are 3 enemies who are following a specific path and are respawned at their starting position.
+The other two are following the player robot and are respawned near the player robot.
+
+![image](https://user-images.githubusercontent.com/104694302/181366899-8c3d60ac-9089-4734-9614-c6efe9083a59.png)
+
 Victory:
 
 To win this game the player need do shoot 10 enemy robots down. With each hit the score increases by one. If the score is eaqual to 10 the wory victoy will show up on the screen. To return to the start screen the player needs to press any key and play again he needs to press any key again.
@@ -49,11 +57,9 @@ Every time the player robot gets hit by a bullet from an enemy or collides with 
 If he gets hit 3 times no heart is left and the game over screen shows up.
 To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
-Enemies:
+![image](https://user-images.githubusercontent.com/104694302/181366990-493f427b-dd67-4dc5-ac89-3bc8e4f5c2d2.png)
 
-There are two tipes of enemies. 
-At the game start there are 3 enemies who are following a specific path and are respawned at their starting position.
-The other two are following the player robot and are respawned near the player robot.
+
 
 
 
