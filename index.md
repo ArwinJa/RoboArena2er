@@ -49,7 +49,7 @@ The other two are following the player robot and are respawned near the player r
 
 Victory:
 
-To win this game the player need do shoot 10 enemy robots down. With each hit the score increases by one. If the score is eaqual to 10 the wory victoy will show up on the screen. To return to the start screen the player needs to press any key and play again he needs to press any key again.
+To win this game the player need do shoot 10 enemy robots down. With each hit the score increases by one. If the score is eaqual to 10 the word victoy will show up on the screen. To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
 Game over:
 
@@ -72,7 +72,7 @@ First days of coding:
 
 Coding the movement of the player and first background
 
-![Alt Text](https://user-images.githubusercontent.com/104694302/181361439-bb0f0df2-9b2e-4b81-a32b-9daf0a8810af.png)
+![Alt Text](https://github.com/ArwinJa/RoboArena2er/blob/pages/img/Example.gif)
 
 
 
