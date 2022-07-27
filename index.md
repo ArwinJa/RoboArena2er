@@ -1,4 +1,13 @@
-test
+RoboArena Report
+
+As a part of a univerity project we created a game called RoboArena.
+
+Game start:
+
+To start the game the player needs to press any key on the keyboard.
+
+
+
 
 ![image](https://user-images.githubusercontent.com/104150733/181349759-e61e8e60-6615-4636-b7e5-3be231d991dc.png)
 
