@@ -55,3 +55,12 @@ To return to the start screen the player needs to press any key and play again h
 UML:
 
 ![image](https://user-images.githubusercontent.com/104694302/181350196-0b1bccd4-09c0-47cd-afd4-ab5bd315572d.png)
+
+
+First days of coding:
+
+Coding the movement of the player and first background
+![image](https://user-images.githubusercontent.com/104694302/181361439-bb0f0df2-9b2e-4b81-a32b-9daf0a8810af.png)
+
+
+
