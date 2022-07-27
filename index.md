@@ -17,7 +17,9 @@ The enemies are dying after one hit from the player and right after another one 
 Arena:
 The map consist of different tiles
 The grass-tile:
+
 ![image](https://user-images.githubusercontent.com/104694302/181357272-4d559169-b065-48c9-8019-1fb0c3b1d8c7.png)
+
 The robots can walk normally on them.
 The sand-tiles
 ![image](https://user-images.githubusercontent.com/104694302/181358528-0d36e6ef-b4ab-4dbb-b38c-52ba2213fdc6.png)
