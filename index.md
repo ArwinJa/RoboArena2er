@@ -63,14 +63,14 @@ To return to the start screen the player needs to press any key and play again h
 
 Game paused:
 
-If the player presses the key p the game pauses. With any other key the game continues again.
+If the player presses the key p the game pauses. With any other key, the game continues again.
 
 ![image](img/pause.gif)
 
 Creation of the Arena:
 
 To create the map for the arena we used a csv file. <br/>
-For the csv file every tile gets its number. The number in the csv file can easily get changed if we wanted to change the map.
+For the csv file, every tile gets its number. The number in the csv file can easily get changed if we wanted to change the map.
 
 
 
