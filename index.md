@@ -9,8 +9,8 @@ As a part of a university project, we created a game called RoboArena.
 - <a href="#enemies"> Enemies </a>
 - <a href="#gamestates"> Game states </a>
 - <a href="#uml"> UML & Sequenze </a>
-- <a href="#first"> First days of coding </a>
 - <a href="#time"> With more time </a>
+- <a href="#schedule"> Time schedule </a>
 
 <br/>
 
@@ -47,7 +47,7 @@ The water tiles: Robots can't walk through them.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358839-0f097f3a-4e8c-4d48-aff2-922a280cb514.png)
 
-The electric tiles: If the robot walked completely on that tile the robot can't walk for a while.
+The electric tiles: If the robot walked completely on that tile the robot can't walk for 90 ticks and then he is immune for 240 ticks.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358992-55d0069f-ef37-4ae2-a0bd-df8e497f9a6c.png)
 
@@ -101,16 +101,47 @@ If the player presses the key p the game pauses. With any other key, the game co
 ![image](https://user-images.githubusercontent.com/104150733/181440729-82361436-8292-4e3f-ad4c-7a2ba4b92168.png)
 
 
-
-<h4 id="first"> First days of coding: </h4>
-
-Coding the movement of the player and the first background
-
-![image](img/Example.gif)
-
 <h4 id="time"> With more time: </h4>
 
 One suggestion we got was to implement more maps for the game.
 We also wanted to do that for a better game experience but we finished the game how it is now on Tuesday. If we were free the last to days we might be able to integrate other maps on time. Not only the coding would have taken too much time but also the enemies. The enemies are following a path containing the coordinates of the points the enemies are following. The points are found out per hand. We tried to create a function so that you only need to click with the mouse on the field where you want the enemy to walk around. That didn't work well because the enemy will still get stuck on the water or wall.
+
+<h4 id="schedule"> Time schedule </h4>
+<b>13.07.22</b><br/>
+Coding the movement of the player and the first background
+
+![image](img/Example.gif)
+
+<b>20.07.22</b><br/>
+We created the tiles and the collision with the different tiles.<br/>
+We also added that the robot should bounce if he hits a wall tile and that he gets stunned when walking on a elecric tile.
+
+<b> 22.07.22</b><br/>
+First enemies.
+
+<b>23.07.22</b><br/>
+The player can attac the enemies<br/>
+The player has lifes shown as hearts on the upper left corner<br/>
+An enemy who follows the player robot and enemies who follow a given path
+
+<b>25.07.22</b><br/>
+After an enemy gets shoot a random enemy gets spawnd.<br/>
+After the score hits 10 the player wins
+
+<b>26.07.22</b><br/>
+The enemies are shooting bulles now<br/>
+Cleaning the main loop
+
+<b>28 & 29.07.22</b><br/>
+Creating the html page
+
+
+
+
+
+
+
+
+
 
 
