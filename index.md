@@ -39,7 +39,7 @@ The sand tiles: Robots walk slowly on them.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358528-0d36e6ef-b4ab-4dbb-b38c-52ba2213fdc6.png)
 
-The wall tiles: Robots can't walk through them and bounce back. IBullets dissapear if they hit a wall tile
+The wall tiles: Robots can't walk through them and bounce back. Bullets dissapear if they hit a wall tile.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358659-b9be476a-5fd3-4262-aecc-08792f293732.png)
 
@@ -108,32 +108,32 @@ We also wanted to do that for a better game experience but we finished the game 
 
 <h4 id="schedule"> Time schedule </h4>
 <b>13.07.22</b><br/>
-Coding the movement of the player and the first background
+Coding the movement of the player and the first background.
 
 ![image](img/Example.gif)
 
 <b>20.07.22</b><br/>
 We created the tiles and the collision with the different tiles.<br/>
-We also added that the robot should bounce if he hits a wall tile and that he gets stunned when walking on a elecric tile.
+We also added that the robot should bounce if he hits a wall tile and that he gets stunned when walking on an electric tile.
 
 <b> 22.07.22</b><br/>
 First enemies.
 
 <b>23.07.22</b><br/>
-The player can attac the enemies<br/>
-The player has lifes shown as hearts on the upper left corner<br/>
-An enemy who follows the player robot and enemies who follow a given path
+The player can attack the enemies.<br/>
+The player has lives shown as hearts in the upper left corner.<br/>
+An enemy who follows the player robot and enemies who follow a given path.
 
 <b>25.07.22</b><br/>
-After an enemy gets shoot a random enemy gets spawnd.<br/>
-After the score hits 10 the player wins
+After an enemy gets shot a random enemy gets spawned.<br/>
+After the score hits 10 the player wins.
 
 <b>26.07.22</b><br/>
-The enemies are shooting bulles now<br/>
-Cleaning the main loop
+The enemies are shooting bullets now.<br/>
+Cleaning the main loop.
 
 <b>28 & 29.07.22</b><br/>
-Creating the html page
+Creating the Html page.
 
 
 
