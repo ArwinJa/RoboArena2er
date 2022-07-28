@@ -418,7 +418,7 @@ def blitTextCenter(win, font, text):
                       win.get_height()/2 - render.get_height()/2))
 
 
-def startGame():
+def gameStart():
     # Pre Game start loop
     while not game_info.started:
         blitTextCenter(Window, MAIN_FONT, "Press any key to start the game")
@@ -649,7 +649,7 @@ while run:
 
     draw(Window)
 
-    startGame()
+    gameStart()
 
     # Loosing the game
     if game_info.hearts == 0:
