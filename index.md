@@ -12,7 +12,7 @@ As a part of a university project, we created a game called RoboArena.
 - <a href="#first"> First days of coding </a>
 - <a href="#time"> With more time </a>
 
-
+<br/>
 
 <h4 id="gamestart"> Game start: </h4>
 
