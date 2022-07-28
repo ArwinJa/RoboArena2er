@@ -14,7 +14,7 @@ As a part of a university project, we created a game called RoboArena.
 
 <br/>
 
-<h4 id="gamestart"> Game start: </h4>
+<h3 id="gamestart"> Game start: </h3>
 
 To start the game the player needs to press any key on the keyboard.
 
