@@ -70,6 +70,13 @@ UML:
 ![image](https://user-images.githubusercontent.com/104694302/181350196-0b1bccd4-09c0-47cd-afd4-ab5bd315572d.png)
 
 
+
+Sequenz:
+
+![image](https://user-images.githubusercontent.com/104150733/181440729-82361436-8292-4e3f-ad4c-7a2ba4b92168.png)
+
+
+
 First days of coding:
 
 Coding the movement of the player and the first background
