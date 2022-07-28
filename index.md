@@ -1,4 +1,4 @@
-## RoboArena Report
+# RoboArena Report
 
 As a part of a university project, we created a game called RoboArena.
 
@@ -20,14 +20,14 @@ To start the game the player needs to press any key on the keyboard.
 
 ![image](https://user-images.githubusercontent.com/104694302/181354976-50ec4a9f-b85d-4b01-8fd1-d279a460ad2c.png)
 
-<h4 id="gameplay"> Gameplay: </h4>
+<h3 id="gameplay"> Gameplay: </h3>
 
 The player controls his Robot with the WASD keys and is able to shoot a bullet with the space bar. <br/>
 The player robot also 3 hearts which represent the lives to robot has.<br/>
 On the map are several enemies which can be shot with a bullet. The enemies are can shoot bullets themself which takes a life from the player robot if it hits him.<br/>
 The enemies are dying after one hit from the player and right after another one spawns again.
 
-<h4 id="arena"> Arena: </h4>
+<h3 id="arena"> Arena: </h3>
 
 The map consists of different tiles:
 
@@ -64,7 +64,7 @@ The other two are following the player robot and are respawned near the player r
 
 ![image](img/enemies.gif)
 
-<h4 id="gamestates"> Game states: </h4>
+<h3 id="gamestates"> Game states: </h3>
 ##### Victory:
 
 To win this game the player needs to shoot 10 enemy robots down. With each hit, the score increases by one. If the score is equal to 10 the word victory will show up on the screen. <br/>
@@ -90,7 +90,7 @@ If the player presses the key p the game pauses. With any other key, the game co
 
 
 
-<h4 id="uml"> UML: </h4>
+<h3 id="uml"> UML: </h3>
 
 ![image](https://user-images.githubusercontent.com/104694302/181350196-0b1bccd4-09c0-47cd-afd4-ab5bd315572d.png)
 
@@ -101,12 +101,12 @@ If the player presses the key p the game pauses. With any other key, the game co
 ![image](https://user-images.githubusercontent.com/104150733/181440729-82361436-8292-4e3f-ad4c-7a2ba4b92168.png)
 
 
-<h4 id="time"> With more time: </h4>
+<h3 id="time"> With more time: </h3>
 
 One suggestion we got was to implement more maps for the game.
 We also wanted to do that for a better game experience but we finished the game how it is now on Tuesday. If we were free the last to days we might be able to integrate other maps on time. Not only the coding would have taken too much time but also the enemies. The enemies are following a path containing the coordinates of the points the enemies are following. The points are found out per hand. We tried to create a function so that you only need to click with the mouse on the field where you want the enemy to walk around. That didn't work well because the enemy will still get stuck on the water or wall.
 
-<h4 id="schedule"> Time schedule </h4>
+<h3 id="schedule"> Time schedule </h3>
 <b>13.07.22</b><br/>
 Coding the movement of the player and the first background.
 
