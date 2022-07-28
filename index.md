@@ -10,9 +10,9 @@ To start the game the player needs to press any key on the keyboard.
 
 Gameplay:
 
-The player controls his Robot with the WASD keys and is able to shoot a bullet with the space bar. 
-The player robot also 3 hearts which represent the lives to robot has.
-On the map are several enemies which can be shot with a bullet. The enemies are can shoot bullets themself which takes a life from the player robot if it hits him.
+The player controls his Robot with the WASD keys and is able to shoot a bullet with the space bar. <br/>
+The player robot also 3 hearts which represent the lives to robot has.<br/>
+On the map are several enemies which can be shot with a bullet. The enemies are can shoot bullets themself which takes a life from the player robot if it hits him.<br/>
 The enemies are dying after one hit from the player and right after another one spawns again.
 
 Arena:
@@ -27,7 +27,7 @@ The sand tiles: Robots walk slowly on them.
 
 ![image](https://user-images.githubusercontent.com/104694302/181358528-0d36e6ef-b4ab-4dbb-b38c-52ba2213fdc6.png)
 
-The wall tiles: Robots can't walk through them and bounce back.
+The wall tiles: Robots can't walk through them and bounce back. IBullets dissapear if they hit a wall tile
 
 ![image](https://user-images.githubusercontent.com/104694302/181358659-b9be476a-5fd3-4262-aecc-08792f293732.png)
 
@@ -41,26 +41,36 @@ The electric tiles: If the robot walked completely on that tile the robot can't 
 
 Enemies:
 
-There are two types of enemies. 
-At the game start, there are 3 enemies who are following a specific path and are respawned at their starting position.
+There are two types of enemies.<br/>
+At the game start, there are 3 enemies who are following a specific path and are respawned at their starting position.<br/>
 The other two are following the player robot and are respawned near the player robot.
 
 ![image](img/enemies.gif)
 
 Victory:
 
-To win this game the player needs to shoot 10 enemy robots down. With each hit, the score increases by one. If the score is equal to 10 the word victory will show up on the screen. To return to the start screen the player needs to press any key and play again he needs to press any key again.
+To win this game the player needs to shoot 10 enemy robots down. With each hit, the score increases by one. If the score is equal to 10 the word victory will show up on the screen. <br/>
+To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
 ![image](img/victory.gif)
 
 Game over:
 
-Every time the player robot gets hit by a bullet from an enemy or collides with an enemy the player loses a heart.
-If he gets hit 3 times no heart is left and the game over screen shows up.
+Every time the player robot gets hit by a bullet from an enemy or collides with an enemy the player loses a heart. If he gets hit 3 times no heart is left and the game over screen shows up.<br/>
 To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
 ![image](img/gameover2.gif)
 
+Game paused:
+
+If the player presses the key p the game pauses. With any other key the game continues again.
+
+![image](img/pause.gif)
+
+Creation of the Arena:
+
+To create the map for the arena we used a csv file. <br/>
+For the csv file every tile gets its number. The number in the csv file can easily get changed if we wanted to change the map.
 
 
 
