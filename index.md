@@ -56,7 +56,7 @@ The electric tiles: If the robot walked completely on that tile the robot can't 
 To create the map for the arena we used a csv file. <br/>
 For the csv file, every tile gets its number. The number in the csv file can easily get changed if we wanted to change the map.
 
-#### Enemies:
+### Enemies:
 
 There are two types of enemies.<br/>
 At the game start, there are 3 enemies who are following a specific path and are respawned at their starting position.<br/>
@@ -65,21 +65,22 @@ The other two are following the player robot and are respawned near the player r
 ![image](img/enemies.gif)
 
 <h3 id="gamestates"> Game states: </h3>
-##### Victory:
+
+#### Victory:
 
 To win this game the player needs to shoot 10 enemy robots down. With each hit, the score increases by one. If the score is equal to 10 the word victory will show up on the screen. <br/>
 To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
 ![image](img/victory.gif)
 
-##### Game over:
+#### Game over:
 
 Every time the player robot gets hit by a bullet from an enemy or collides with an enemy the player loses a heart. If he gets hit 3 times no heart is left and the game over screen shows up.<br/>
 To return to the start screen the player needs to press any key and play again he needs to press any key again.
 
 ![image](img/gameover2.gif)
 
-##### Game paused:
+#### Game paused:
 
 If the player presses the key p the game pauses. With any other key, the game continues again.
 
@@ -96,7 +97,7 @@ If the player presses the key p the game pauses. With any other key, the game co
 
 
 
-#### Sequenz:
+### Sequenz:
 
 ![image](https://user-images.githubusercontent.com/104150733/181440729-82361436-8292-4e3f-ad4c-7a2ba4b92168.png)
 
