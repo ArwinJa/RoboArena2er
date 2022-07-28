@@ -118,7 +118,10 @@ We created the tiles and the collision with the different tiles.<br/>
 We also added that the robot should bounce if he hits a wall tile and that he gets stunned when walking on an electric tile.
 
 <b> 22.07.22</b><br/>
-First enemies.
+First enemies.<br/>
+The player robot can shoot.<br/>
+The player robot can't walk over the water tiles.<br/>
+The player needs to press a key to start the game.
 
 <b>23.07.22</b><br/>
 The player can attack the enemies.<br/>
@@ -131,18 +134,9 @@ After the score hits 10 the player wins.
 
 <b>26.07.22</b><br/>
 The enemies are shooting bullets now.<br/>
-Cleaning the main loop.
+Cleaning the main loop and the code in general.
 
 <b>28 & 29.07.22</b><br/>
 Creating the Html page.
-
-
-
-
-
-
-
-
-
 
 
