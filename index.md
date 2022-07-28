@@ -4,12 +4,13 @@ As a part of a university project, we created a game called RoboArena.
 
 
 - <a href="#gamestart"> Game start </a>
-- <a href="gameplay"> Gameplay </a>
-- <a href="arena"> Arena </a>
-- <a href="enemies"> Enemies </a>
-- <a href="gamestates"> Game states </a>
-- <a href="uml"> UML & Sequenze </a>
-- <a href="time"> With more time </a>
+- <a href="#gameplay"> Gameplay </a>
+- <a href="#arena"> Arena </a>
+- <a href="#enemies"> Enemies </a>
+- <a href="#gamestates"> Game states </a>
+- <a href="#uml"> UML & Sequenze </a>
+- <a href="#first"> First days of coding </a>
+- <a href="#time"> With more time </a>
 
 
 
@@ -101,7 +102,7 @@ If the player presses the key p the game pauses. With any other key, the game co
 
 
 
-#### First days of coding:
+<h4 id="first"> First days of coding: </h4>
 
 Coding the movement of the player and the first background
 
