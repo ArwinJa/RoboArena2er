@@ -6,21 +6,32 @@ The Game is a top down shooter where the player has to kill a number of enemy ro
 Controls:
 
 W - Move forward
+
 S - Move Backward
+
 A - Turn left
+
 D - Turn Right
+
 Space - Shooting
+
 P - Pause the game
+
 Esc - quit game
+
 Any - Start/Restart or Resume the Game
 
 
 Tiletypes
 
 Wall - Impassable and bounce player back
+
 Water - Impassable
+
 Sand - Slows the player
+
 Electric - Stuns the player
+
 Grass - No effect 
 
 
