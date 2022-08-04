@@ -16,7 +16,7 @@ Syntax highlighted code block
 ### Header 3
 
 Alexandra Burger:
-- Enemy class
+- Enemy class (except enemyshoot)
 - game can be closed with esc
 - Victory screen is shown when score = 10 and start screen is shown again when any key is pressed
 
