@@ -1,9 +1,12 @@
 Teamprojekt SS 2022
-Robo Arena
+Robo Arena by Arwin Jacob and Alexandra Burger
 
 The Game is a top down shooter where the player has to kill a number of enemy robots to achieve victory.
 
+
+
 Controls:
+
 
 W - Move forward
 
@@ -40,6 +43,6 @@ Alexandra Burger:
 - game can be closed with esc
 - Victory screen is shown when score = 10 and start screen is shown again when any key is pressed
 
-Arwin:
+Arwin Jacob:
 - Rest
 
