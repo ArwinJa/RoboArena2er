@@ -42,6 +42,7 @@ Alexandra Burger:
 - Enemy class (except enemyshoot)
 - game can be closed with esc
 - Victory screen is shown when score = 10 and start screen is shown again when any key is pressed
+- Htlm page (except black background)
 
 Arwin Jacob:
 - Rest
